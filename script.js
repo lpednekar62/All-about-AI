@@ -331,7 +331,8 @@ const GOALS = [
 
 /* ------------------------------------------------------------------- STATE */
 const state = { id:'', lang:CONFIG.DEFAULT_LANG, name:'', phone:'', email:'',
-                age:'', goal:'', answers:{}, idx:0, result:null, sent:false };
+                age:'', goal:'', answers:{}, idx:0, result:null,
+                leadSent:false, sent:false };
 
 const $  = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
@@ -403,7 +404,7 @@ function save() {
     sessionStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify({
       id:state.id, lang:state.lang, name:state.name, phone:state.phone, email:state.email,
       age:state.age, goal:state.goal, answers:state.answers, idx:state.idx,
-      sent:state.sent, ts:Date.now()
+      leadSent:state.leadSent, sent:state.sent, ts:Date.now()
     }));
   } catch (_) {}
 }
@@ -428,7 +429,8 @@ function restore() {
     state.goal    = GOALS.some(g => g.en === d.goal) ? d.goal : '';
     state.answers = (d.answers && typeof d.answers === 'object') ? d.answers : {};
     state.idx     = Math.min(Math.max(parseInt(d.idx, 10) || 0, 0), QUESTIONS.length - 1);
-    state.sent    = false;
+    state.leadSent = d.leadSent === true;
+    state.sent     = false;
     return Object.keys(state.answers).length > 0;
   } catch (_) { return false; }
 }
@@ -436,7 +438,8 @@ function wipe() {
   try { sessionStorage.removeItem(CONFIG.STORAGE_KEY); } catch (_) {}
   state.id = newId();
   state.name = state.phone = state.email = state.age = state.goal = '';
-  state.answers = {}; state.idx = 0; state.result = null; state.sent = false;
+  state.answers = {}; state.idx = 0; state.result = null;
+  state.leadSent = false; state.sent = false;
 }
 
 /* ------------------------------------------------------------------ SCREENS */
@@ -497,6 +500,9 @@ function postToSheet(payload) {
   } catch (_) { return false; }
 }
 
+/* Language is folded into Event so the sheet needs no extra column for it. */
+function eventLabel() { return CONFIG.VENUE + ' (' + state.lang.toUpperCase() + ')'; }
+
 /* Answers are always stored in English so the sheet stays analysable. */
 function answerSummary() {
   const out = {};
@@ -508,6 +514,21 @@ function answerSummary() {
   return out;
 }
 
+/* Sent the moment the details form is submitted, before question 1. A visitor
+   who abandons halfway is still captured, with Status "Started" in the sheet. */
+function sendLead() {
+  if (state.leadSent) return;
+  const ok = postToSheet({
+    type:'lead',
+    id:state.id,
+    event:eventLabel(),
+    name:state.name, phone:state.phone, email:state.email,
+    age:state.age, goal:state.goal
+  });
+  if (ok) { state.leadSent = true; save(); }
+  track('lead_captured', {});
+}
+
 function sendResult(r) {
   if (state.sent) return;
   const catPct = {};
@@ -517,8 +538,7 @@ function sendResult(r) {
     type:'result',
     id:state.id,
     submittedAt:new Date().toISOString(),
-    // language is folded into Event so the sheet needs no extra column
-    event:CONFIG.VENUE + ' (' + state.lang.toUpperCase() + ')',
+    event:eventLabel(),
     name:state.name, phone:state.phone, email:state.email,
     age:state.age, goal:state.goal,
     score:r.pct, band:r.band.name.en,
@@ -813,6 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     if (!validateDetails()) return;
     save();
+    sendLead();
     goQuiz();
   });
 

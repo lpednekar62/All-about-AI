@@ -97,24 +97,46 @@ to keep first.
 
 ### What lands in the Sheet
 
-One row per completed assessment, 38 columns:
+**One row per visitor**, 39 columns, keyed on a visitor id so a person is never
+duplicated — the row is created, then updated in place.
 
 | Group | Columns |
 |---|---|
-| Identity | Received At, Submitted At, ID, Event *(carries the language)* |
+| Identity | Received At, Last Updated, ID, Event *(carries the language)*, **Status** |
 | Visitor | Name, Mobile, Email, Age, Goal |
 | Result | Score %, Band, Top Blind Spot 1–3 |
-| Breakdown | Nutrition %, Fitness %, Sleep %, Stress %, Preventive %, Genetics % |
-| Raw answers | Q1–Q15, as the text the visitor actually chose |
-| Follow-up | Questions Answered, **Contacted Via**, **Contacted At** |
+| Breakdown | Nutrition %, Movement %, Sleep %, Stress %, Preventive %, Genetics % |
+| Raw answers | Q1–Q15, as the English text the visitor actually chose |
+| Follow-up | Questions Answered, Contacted Via, Contacted At |
 
-The last two are the useful ones for working the list afterwards: when someone taps a
-WhatsApp button, a second tiny beacon stamps *which* person they contacted and when.
-So a row with a score but a blank **Contacted Via** is a warm lead who did **not**
-reach out — exactly the list worth calling.
+**Status is the column to work from:**
 
-Numbers are stored with a leading apostrophe so Sheets keeps them as text rather than
-mangling them into scientific notation.
+| Status | Meaning | Worth |
+|---|---|---|
+| `Started` | Gave their details, did not finish the questions | Still a real lead — call them |
+| `Completed` | Finished and saw their score | Full profile, best context for a call |
+
+The row is written **the moment the details form is submitted, before question 1**,
+so someone who walks away halfway is still captured. Finishing updates that same
+row rather than adding a second one. Tapping a WhatsApp button stamps **Contacted
+Via** and **Contacted At** on it.
+
+So the highest-value list is: `Status = Completed` **and** `Contacted Via` empty —
+someone who went all the way through, saw a score, and did not reach out.
+
+Mobile numbers are stored with a leading apostrophe so Sheets keeps them as text
+instead of mangling them into scientific notation.
+
+**The sheet is opened by ID**, set as `SHEET_ID` at the top of `Code.gs`. This
+matters: the obvious `SpreadsheetApp.getActiveSpreadsheet()` returns null in a
+standalone script and every write fails silently while the health check still
+reports OK. Opening by ID works whether the script is bound to the sheet or not.
+If you ever point this at a different sheet, change `SHEET_ID`.
+
+**Checking it works:** open the `/exec` URL in a browser. It reports the
+spreadsheet name, tab name, row count and column count — it touches the sheet, so
+a success there means the write path is genuinely reachable, not just that the
+script is deployed.
 
 ---
 
