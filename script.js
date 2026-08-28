@@ -19,7 +19,7 @@ const CONFIG = {
     { key: 'laxman', label: { en:'Talk to Laxman', hi:'लक्ष्मण से बात करें' }, number: '919326082818' }
   ],
 
-  SHEET_ENDPOINT: 'https://script.google.com/macros/s/AKfycbxU1JZDIZv40w9aWFyWj2h51-VExSdsTfoEfs9FTItJetW94HuYwtdk-36wORfkmwMunA/exec',
+  SHEET_ENDPOINT: 'https://script.google.com/macros/s/AKfycbwsBQ9ja5Yp0ftNVIKxHM1YHaZ7af84YO48XbYtKofh6xc7g68dU9JC66Jk4LGpuinLVw/exec',
 
   VENUE: 'Welocity',
   DEFAULT_LANG: 'en',
