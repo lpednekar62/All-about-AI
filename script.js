@@ -23,7 +23,7 @@ const CONFIG = {
   EVENT_LABEL: 'Welocity Life Science  ·  DNAWellCode',
 
   CONTACTS: [
-    { key: 'mumtaz', label: 'Talk to Mumtaz', number: '' },
+    { key: 'mumtaz', label: 'Talk to Mumtaz', number: '919082374527' },
     { key: 'laxman', label: 'Talk to Laxman', number: '919326082818' }
   ],
 
