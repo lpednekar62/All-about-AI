@@ -110,6 +110,7 @@ booth is the one failure mode that costs the whole day.
 
 | | Nitro Gym build | This build |
 |---|---|---|
+| Questions | Assumed a gym, a trainer and a training programme | Everyday moments anyone recognises |
 | Brand | DNAWellCode / Nitro Gym, ink-navy | Welocity, indigo-violet + cream + teal/gold |
 | Contacts | Preeti, Nishant | Mumtaz, Laxman |
 | Data | Nothing left the device | Completed runs saved to a Google Sheet |
@@ -120,14 +121,52 @@ booth is the one failure mode that costs the whole day.
 The optional WhatsApp field was added because a Sheet of names with no phone numbers
 cannot be followed up — which is the point of collecting it at all.
 
+The questions were rewritten because the Nitro set was written for people standing
+in a gym. At a general exhibition, "how personalised is your training programme?"
+excludes most of the room. See §6.
+
 ---
 
-## 6 · Scoring (unchanged from the original build)
+## 6 · The question set
 
-15 questions across 6 categories. Every option carries a published blind-spot value
-**0–4**: `0` personalised and understood, `4` never examined. Some questions offer an
-**N/A** option ("I don't take supplements", "I don't consume caffeine") which is removed
-from *both* sides of the calculation — it never penalises.
+Rewritten for a general exhibition audience. The Nitro Gym version assumed a
+training programme and a gym membership; roughly half its questions did not
+apply to someone who simply eats, sleeps and works. These are built around
+moments anyone recognises — the 4 pm slump, feeling heavy after a meal, waking
+up tired, a check-up report nobody explained.
+
+The stems still ask about **understanding**, never about health status. "How is
+your energy?" would measure the person and drift toward a health test; "do you
+know what causes your afternoon dip?" measures the blind spot and keeps the
+page clear of medical claims. Every question follows that shape.
+
+| # | Category | Question |
+|---|---|---|
+| 1 | Food & digestion | How did you decide what you eat on a normal day? |
+| 2 | Food & digestion | After a heavy meal you feel heavy, sleepy or bloated — do you know which foods do that to you? |
+| 3 | Food & digestion | How were the supplements, vitamins or health powders you take chosen? *(has N/A)* |
+| 4 | Movement & daily activity | Do you know how much movement your body actually needs in a day — and whether you are getting it? |
+| 5 | Movement & daily activity | When your body feels stiff, heavy or tired for a few days, do you usually know why — and what to change? |
+| 6 | Sleep & energy | That drop in energy in the afternoon — do you know what causes yours? |
+| 7 | Sleep & energy | How well do you know what your tea or coffee actually does to your sleep and energy? *(has N/A)* |
+| 8 | Sleep & energy | On mornings when you wake up still tired, do you know what caused it? |
+| 9 | Stress & mood | When pressure builds up, do you know how it shows up in your body — appetite, sleep, digestion, temper? |
+| 10 | Stress & mood | Do you know what genuinely helps you switch off and feel normal again? |
+| 11 | Preventive & family awareness | How well do you know which health conditions run in your family? |
+| 12 | Preventive & family awareness | The last time you had a health check-up, did you understand what the numbers actually meant for you? |
+| 13 | Preventive & family awareness | Have you turned what you know about your family's health into anything you actually do differently? |
+| 14 | Personalisation & genetics | Have you ever had health guidance based on your own body's data rather than general advice? |
+| 15 | Personalisation & genetics | How much of what you do for your health is based on something actually measured about you? |
+
+Q7 (tea/coffee) is the signature question — the on-screen twin of the printed
+Caffeine Card, so poster, card and page tell one story.
+
+### Scoring
+
+Every option carries a published blind-spot value **0–4**: `0` personalised and
+understood, `4` never examined. The two N/A options ("I do not take any", "I do
+not drink tea or coffee") are removed from *both* sides of the calculation —
+they never penalise, because not doing something is a valid choice, not a gap.
 
 ```
 Blind Spot Score = (total blind-spot points ÷ maximum applicable points) × 100, rounded
@@ -141,14 +180,18 @@ Blind Spot Score = (total blind-spot points ÷ maximum applicable points) × 100
 | 70–84% | High personalisation blind spot |
 | 85–100% | Mostly guesswork |
 
-No band uses "unhealthy", "poor health", "high risk" or implies disease. The score
-measures how personalised someone's routine is, never whether they are healthy — that
-is what keeps the page clear of medical claims.
+No band uses "unhealthy", "poor health", "high risk" or implies disease. The
+score measures how personalised someone's routine is, never whether they are
+healthy — that is what keeps the page clear of medical claims.
 
-A visitor with a real trainer, a dietitian and prior testing will legitimately score
-10–30%. The scoring is not rigged to clear 70%.
+Someone with a doctor, a dietitian and recent tests they understood will
+legitimately score 10–30%. The scoring is not rigged to clear 70%.
 
----
+**Note on the Sheet:** the category *keys* were deliberately left unchanged when
+the questions were rewritten, so the Apps Script and the existing header row
+still work untouched. This means the column headed **Fitness %** now carries the
+*Movement & daily activity* score. Rename that one header in the Sheet by hand
+if it bothers you — nothing in the code depends on the header text.
 
 ## 7 · Privacy and consent
 

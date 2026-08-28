@@ -52,11 +52,11 @@ function track(name, props) {
 
 /* --------------------------------------------------------------- CATEGORIES */
 const CATS = {
-  nutrition: { name: 'Nutrition clarity',           note: 'How well you understand what your body specifically does with food.' },
-  fitness:   { name: 'Fitness & recovery',          note: 'Whether your training and recovery are designed for you or borrowed.' },
-  sleep:     { name: 'Sleep & energy',              note: 'How well you understand your own energy, sleep and stimulant response.' },
-  stress:    { name: 'Stress response',             note: 'Whether you know how pressure actually shows up in your body.' },
-  prevent:   { name: 'Preventive & family awareness',note: 'Whether family health patterns have become knowledge you act on.' },
+  nutrition: { name: 'Food & digestion',            note: 'How well you understand what your body specifically does with what you eat.' },
+  fitness:   { name: 'Movement & daily activity',   note: 'Whether you know what your body actually needs to move and feel well.' },
+  sleep:     { name: 'Sleep & energy',              note: 'How well you understand your own energy dips, sleep and tea/coffee response.' },
+  stress:    { name: 'Stress & mood',               note: 'Whether you know how pressure actually shows up in your body.' },
+  prevent:   { name: 'Preventive & family awareness',note: 'Whether family health patterns and check-ups have become knowledge you act on.' },
   genetics:  { name: 'Personalisation & genetics',  note: 'How much of your routine rests on measured information about you.' }
 };
 
@@ -66,107 +66,107 @@ const CATS = {
    penalty — not taking supplements is a valid choice, not a blind spot.
    ------------------------------------------------------------------------ */
 const QUESTIONS = [
-  { id:'q1', cat:'nutrition', text:'How was your current eating plan put together?', opts:[
-    { t:'Designed for me using professional input and my own data', p:0 },
-    { t:'Adjusted over time from my own observation and experience', p:1 },
-    { t:'Based mostly on general advice I have read or been told', p:2 },
-    { t:'I do not follow a particular plan', p:3 },
-    { t:'Copied from a friend, trainer, influencer or online plan', p:4 }
+  { id:'q1', cat:'nutrition', text:'How did you decide what you eat on a normal day?', opts:[
+    { t:'It was planned for me using professional input and my own test results', p:0 },
+    { t:'I worked it out over time from what I noticed suits me', p:1 },
+    { t:'From general advice about what is supposed to be healthy', p:2 },
+    { t:'I eat whatever is cooked or whatever is available', p:3 },
+    { t:'I follow a diet I picked up online or from someone else', p:4 }
   ]},
-  { id:'q2', cat:'nutrition', text:'How clearly do you understand why certain foods affect your energy, hunger or weight differently?', opts:[
-    { t:'Very clearly, and I understand why', p:0 },
-    { t:'Fairly clearly', p:1 },
-    { t:'I have noticed patterns but cannot explain them', p:2 },
-    { t:'I mostly guess', p:3 },
+  { id:'q2', cat:'nutrition', text:'After a heavy meal you feel heavy, sleepy or bloated — do you know which foods do that to you?', opts:[
+    { t:'Yes — I know exactly which foods affect me and why', p:0 },
+    { t:'Mostly', p:1 },
+    { t:'I have noticed a pattern but cannot explain it', p:2 },
+    { t:'I just accept it as normal', p:3 },
+    { t:'I have never thought about it', p:4 }
+  ]},
+  { id:'q3', cat:'nutrition', text:'How were the supplements, vitamins or health powders you take chosen?', opts:[
+    { t:'From test results plus professional guidance', p:0 },
+    { t:'On a doctor’s or dietitian’s advice', p:1 },
+    { t:'From general recommendations', p:2 },
+    { t:'Suggested by family, friends or social media', p:3 },
+    { t:'I am not sure whether I actually need them', p:4 },
+    { t:'I do not take any', na:true }
+  ]},
+  { id:'q4', cat:'fitness', text:'Do you know how much movement your body actually needs in a day — and whether you are getting it?', opts:[
+    { t:'Yes — I know what my body needs and I get it', p:0 },
+    { t:'Roughly, and mostly yes', p:1 },
+    { t:'I know I should move more, but not how much', p:2 },
+    { t:'I only think about it when something starts hurting', p:3 },
     { t:'I have never really thought about it', p:4 }
   ]},
-  { id:'q3', cat:'nutrition', text:'How were your current supplements chosen?', opts:[
-    { t:'From test results plus professional guidance', p:0 },
-    { t:'On a qualified professional’s advice', p:1 },
-    { t:'From general recommendations', p:2 },
-    { t:'Suggested by friends, trainers or social media', p:3 },
-    { t:'I am not sure whether I actually need them', p:4 },
-    { t:'I do not take any supplements', na:true }
-  ]},
-  { id:'q4', cat:'fitness', text:'How personalised is your current training programme?', opts:[
-    { t:'Built for me and reviewed regularly', p:0 },
-    { t:'Partly personalised', p:1 },
-    { t:'A standard gym programme', p:2 },
-    { t:'Copied from someone else or found online', p:3 },
-    { t:'I am not sure what actually suits me', p:4 }
-  ]},
-  { id:'q5', cat:'fitness', text:'When your progress slows down, do you usually know why?', opts:[
-    { t:'Usually, and I know what to change', p:0 },
+  { id:'q5', cat:'fitness', text:'When your body feels stiff, heavy or tired for a few days, do you usually know why — and what to change?', opts:[
+    { t:'Usually, and I know exactly what to change', p:0 },
     { t:'Often', p:1 },
     { t:'Sometimes', p:2 },
     { t:'Rarely', p:3 },
-    { t:'I switch to a different plan and try again', p:4 }
+    { t:'I just wait for it to pass', p:4 }
   ]},
-  { id:'q6', cat:'fitness', text:'How well do you understand how much recovery your body needs?', opts:[
-    { t:'Very well', p:0 },
+  { id:'q6', cat:'sleep', text:'That drop in energy in the afternoon — do you know what causes yours?', opts:[
+    { t:'Yes — I know my pattern and what triggers it', p:0 },
+    { t:'Mostly', p:1 },
+    { t:'I notice it every day but cannot explain it', p:2 },
+    { t:'I just push through it with tea, coffee or something sweet', p:3 },
+    { t:'I have never thought about why it happens', p:4 }
+  ]},
+  { id:'q7', cat:'sleep', text:'How well do you know what your tea or coffee actually does to your sleep and energy?', opts:[
+    { t:'Very well — I have deliberately tested it', p:0 },
     { t:'Fairly well', p:1 },
-    { t:'Only through trial and error', p:2 },
-    { t:'Not really', p:3 },
-    { t:'I do not factor recovery in', p:4 }
-  ]},
-  { id:'q7', cat:'sleep', text:'How predictable is your energy across the day?', opts:[
-    { t:'Mostly stable and predictable', p:0 },
-    { t:'Usually stable, occasionally off', p:1 },
-    { t:'It swings with food, sleep or stress', p:2 },
-    { t:'I get regular energy crashes', p:3 },
-    { t:'I have never paid attention to it', p:4 }
-  ]},
-  { id:'q8', cat:'sleep', text:'How well do you know what caffeine actually does to your sleep and energy?', opts:[
-    { t:'Very well — I have tested it deliberately', p:0 },
-    { t:'Fairly well', p:1 },
-    { t:'I notice an effect but I am not sure', p:2 },
+    { t:'I notice something but I am not sure', p:2 },
     { t:'I drink it without tracking the effect', p:3 },
     { t:'I have never considered it', p:4 },
-    { t:'I do not consume caffeine', na:true }
+    { t:'I do not drink tea or coffee', na:true }
   ]},
-  { id:'q9', cat:'sleep', text:'How confidently do you understand your own sleep pattern?', opts:[
-    { t:'Very confidently', p:0 },
+  { id:'q8', cat:'sleep', text:'On mornings when you wake up still tired, do you know what caused it?', opts:[
+    { t:'Yes — I understand my own sleep well', p:0 },
     { t:'I understand parts of it', p:1 },
-    { t:'I know something is inconsistent, but not what', p:2 },
+    { t:'I know something is off, but not what', p:2 },
     { t:'I mostly guess', p:3 },
-    { t:'I have never looked at it', p:4 }
+    { t:'I have never looked into it', p:4 }
   ]},
-  { id:'q10', cat:'stress', text:'When pressure rises, do you know how it affects your appetite, sleep, recovery and motivation?', opts:[
+  { id:'q9', cat:'stress', text:'When pressure builds up, do you know how it shows up in your body — appetite, sleep, digestion, temper?', opts:[
     { t:'Yes — I know my own pattern', p:0 },
     { t:'Mostly', p:1 },
     { t:'I notice changes but cannot explain them', p:2 },
     { t:'I usually only realise afterwards', p:3 },
     { t:'I have never connected the two', p:4 }
   ]},
-  { id:'q11', cat:'stress', text:'How well do you know which recovery methods genuinely work for you?', opts:[
-    { t:'Very well — I have tested what works', p:0 },
+  { id:'q10', cat:'stress', text:'Do you know what genuinely helps you switch off and feel normal again?', opts:[
+    { t:'Yes — I have worked out what actually works for me', p:0 },
     { t:'Fairly well', p:1 },
     { t:'I have a rough idea', p:2 },
-    { t:'I try whatever is popular and hope', p:3 },
+    { t:'I try whatever is popular and hope it works', p:3 },
     { t:'I have not looked into it', p:4 }
   ]},
-  { id:'q12', cat:'prevent', text:'How well do you understand your family’s health patterns?', opts:[
-    { t:'Very well, with professional guidance', p:0 },
+  { id:'q11', cat:'prevent', text:'How well do you know which health conditions run in your family?', opts:[
+    { t:'Very well, and I have had professional guidance on it', p:0 },
     { t:'I know the history but have had no guidance on it', p:1 },
     { t:'I know a few details', p:2 },
-    { t:'I rarely discuss it', p:3 },
+    { t:'We rarely discuss it at home', p:3 },
     { t:'I am not really aware of it', p:4 }
   ]},
-  { id:'q13', cat:'prevent', text:'Have you turned what you know about your family’s health into any specific preventive action?', opts:[
+  { id:'q12', cat:'prevent', text:'The last time you had a health check-up, did you understand what the numbers actually meant for you?', opts:[
+    { t:'Yes — someone explained what each result meant for me', p:0 },
+    { t:'I understood the main points', p:1 },
+    { t:'I was told it was normal, and left it there', p:2 },
+    { t:'I saw the report but did not really follow it', p:3 },
+    { t:'I have not had a check-up in a long time', p:4 }
+  ]},
+  { id:'q13', cat:'prevent', text:'Have you turned what you know about your family’s health into anything you actually do differently?', opts:[
     { t:'Yes — a clear plan made with professional input', p:0 },
     { t:'Yes — a few deliberate changes', p:1 },
     { t:'I have thought about it but not acted', p:2 },
     { t:'Not yet', p:3 },
     { t:'I have never considered it', p:4 }
   ]},
-  { id:'q14', cat:'genetics', text:'Have you ever had personalised insight that combines your biology with your lifestyle?', opts:[
+  { id:'q14', cat:'genetics', text:'Have you ever had health guidance based on your own body’s data rather than general advice?', opts:[
     { t:'Yes, and it was properly explained to me', p:0 },
     { t:'Yes, but I did not fully understand the report', p:1 },
     { t:'I have read about it but never done it', p:2 },
     { t:'No', p:3 },
     { t:'I do not know how that works', p:4 }
   ]},
-  { id:'q15', cat:'genetics', text:'How much of your current routine is based on measured information about you specifically?', opts:[
+  { id:'q15', cat:'genetics', text:'How much of what you do for your health is based on something actually measured about you?', opts:[
     { t:'Most of it', p:0 },
     { t:'Some of it', p:1 },
     { t:'Very little', p:2 },
