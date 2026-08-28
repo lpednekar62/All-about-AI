@@ -29,7 +29,7 @@ const CONFIG = {
 
   /* Google Apps Script Web App URL — see README.md §2.
      Leave blank to disable saving entirely; the assessment still works. */
-  SHEET_ENDPOINT: '',
+  SHEET_ENDPOINT: 'https://script.google.com/macros/s/AKfycbxU1JZDIZv40w9aWFyWj2h51-VExSdsTfoEfs9FTItJetW94HuYwtdk-36wORfkmwMunA/exec',
 
   VENUE: 'Welocity',
 
