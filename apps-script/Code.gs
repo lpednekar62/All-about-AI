@@ -100,11 +100,24 @@ function json_(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-/* Health check that actually proves the sheet is reachable — opening the
-   /exec URL in a browser should report the sheet name and current row count.
-   If this errors, the write path would have failed too. */
-function doGet() {
+/* GET does double duty.
+ *
+ * With no parameters it is a health check that opens the sheet, so a success
+ * proves the write path is reachable rather than only that the script deployed.
+ *
+ * With ?d=<json> it performs the same write as doPost. This exists because
+ * Apps Script answers every request with a 302 to googleusercontent.com, and
+ * several mobile browsers do not follow that redirect for sendBeacon or, in
+ * some configurations, for a cross-origin POST — the request is accepted and
+ * then quietly lost. An image GET follows redirects everywhere, so the page
+ * sends by both routes. Writes upsert on the visitor id, so a duplicate
+ * arriving by the other route is a harmless no-op update.
+ */
+function doGet(e) {
   try {
+    if (e && e.parameter && e.parameter.d) {
+      return handle_(e.parameter.d);
+    }
     var sh = getSheet_();
     return json_({
       ok: true,
@@ -120,22 +133,20 @@ function doGet() {
   }
 }
 
-function doPost(e) {
+/* Shared by both transports. */
+function handle_(raw) {
   var lock = LockService.getScriptLock();
   try { lock.waitLock(25000); }
   catch (err) { return json_({ ok:false, error:'busy' }); }
 
   try {
-    if (!e || !e.postData || !e.postData.contents) return json_({ ok:false, error:'no body' });
-
     var d;
-    try { d = JSON.parse(e.postData.contents); }
+    try { d = JSON.parse(raw); }
     catch (err) { return json_({ ok:false, error:'bad json' }); }
 
     if (!d || !d.id) return json_({ ok:false, error:'no id' });
 
     var sh = getSheet_();
-
     if (d.type === 'contact_click') return json_(stampContact_(sh, d));
     if (d.type === 'result')        return json_(saveResult_(sh, d));
     return json_(saveLead_(sh, d));
@@ -145,6 +156,13 @@ function doPost(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+function doPost(e) {
+  if (!e || !e.postData || !e.postData.contents) {
+    return json_({ ok:false, error:'no body' });
+  }
+  return handle_(e.postData.contents);
 }
 
 /* Row number for a visitor id, or 0. Searched newest-first: the row we want

@@ -483,21 +483,54 @@ function calculate() {
 function postToSheet(payload) {
   const url = String(CONFIG.SHEET_ENDPOINT || '').trim();
   if (!url) return false;
+
   let body;
   try { body = JSON.stringify(payload); } catch (_) { return false; }
 
+  let sent = false;
+
+  /* 1 · GET image beacon — the primary transport, deliberately.
+     Apps Script answers every request with a 302 to googleusercontent.com.
+     sendBeacon does NOT follow that redirect in several mobile browsers: it
+     returns true because the request was queued, then the payload dies at the
+     redirect with no error anywhere. An image request follows redirects in
+     every browser, needs no CORS, and still fires while the page is being
+     backgrounded — which is exactly what happens when someone taps through to
+     WhatsApp. The image itself fails to decode (the reply is JSON); that is
+     irrelevant, the server has already done the write. */
   try {
-    if (navigator.sendBeacon) {
-      const blob = new Blob([body], { type:'text/plain;charset=UTF-8' });
-      if (navigator.sendBeacon(url, blob)) return true;
+    const qs = url + (url.indexOf('?') > -1 ? '&' : '?') + 'd=' + encodeURIComponent(body);
+    if (qs.length < 7500) {
+      const img = new Image();
+      img.onerror = img.onload = null;
+      img.src = qs;
+      if (!window.__bssBeacons) window.__bssBeacons = [];
+      window.__bssBeacons.push(img);   // hold a reference so GC cannot cancel it
+      sent = true;
     }
   } catch (_) {}
 
+  /* 2 · POST as well. Carries payloads too long for a URL, and covers the case
+     where images are blocked. Every write upserts on the visitor id, so the two
+     transports arriving together are harmless — the second is a no-op update. */
   try {
-    fetch(url, { method:'POST', mode:'no-cors', keepalive:true,
-                 headers:{ 'Content-Type':'text/plain;charset=UTF-8' }, body:body }).catch(() => {});
-    return true;
-  } catch (_) { return false; }
+    fetch(url, {
+      method:'POST', mode:'no-cors', keepalive:true, redirect:'follow',
+      headers:{ 'Content-Type':'text/plain;charset=UTF-8' }, body:body
+    }).catch(() => {});
+    sent = true;
+  } catch (_) {}
+
+  /* 3 · sendBeacon only if neither of the above could even be attempted. */
+  if (!sent) {
+    try {
+      if (navigator.sendBeacon) {
+        sent = navigator.sendBeacon(url, new Blob([body], { type:'text/plain;charset=UTF-8' }));
+      }
+    } catch (_) {}
+  }
+
+  return sent;
 }
 
 /* Language is folded into Event so the sheet needs no extra column for it. */
