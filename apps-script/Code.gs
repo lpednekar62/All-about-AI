@@ -19,7 +19,7 @@ var SHEET_NAME = 'Responses';
 
 var HEADERS = [
   'Received At', 'Submitted At', 'ID', 'Event',
-  'Name', 'WhatsApp', 'Age', 'Goal',
+  'Name', 'Mobile', 'Email', 'Age', 'Goal',
   'Score %', 'Band', 'Top Blind Spot 1', 'Top Blind Spot 2', 'Top Blind Spot 3',
   'Nutrition %', 'Fitness %', 'Sleep %', 'Stress %', 'Preventive %', 'Genetics %',
   'Q1 Eating plan', 'Q2 Food response', 'Q3 Supplements',
@@ -33,8 +33,8 @@ var HEADERS = [
 
 var CAT_KEYS = ['nutrition', 'fitness', 'sleep', 'stress', 'prevent', 'genetics'];
 var ID_COL = 3;               // column C
-var CONTACT_VIA_COL = 36;     // 'Contacted Via'
-var CONTACT_AT_COL  = 37;     // 'Contacted At'
+var CONTACT_VIA_COL = 37;     // 'Contacted Via'
+var CONTACT_AT_COL  = 38;     // 'Contacted At'
 
 function getSheet_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -48,8 +48,9 @@ function getSheet_() {
       .setBackground('#1A1440')
       .setFontColor('#FFFFFF');
     sh.setFrozenRows(1);
-    sh.setColumnWidth(5, 140);   // Name
-    sh.setColumnWidth(6, 130);   // WhatsApp
+    sh.setColumnWidth(5, 150);   // Name
+    sh.setColumnWidth(6, 130);   // Mobile
+    sh.setColumnWidth(7, 210);   // Email
   }
   return sh;
 }
@@ -113,6 +114,7 @@ function appendResult_(sh, d) {
     // leading apostrophe keeps a mobile number as text so Sheets never
     // reformats 9326082818 into scientific notation or drops a leading zero
     d.phone ? "'" + d.phone : '',
+    d.email || '',
     d.age   || '',
     d.goal  || '',
     typeof d.score === 'number' ? d.score : '',

@@ -12,12 +12,12 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main" data-i18n="skipLink">Skip to content</a>
 
 <header class="topbar">
   <div class="wrap topbar__in">
@@ -31,7 +31,11 @@
       </span>
       Welocity
     </span>
-    <span class="brand__sub">Wellness Blind Spot Score</span>
+
+    <div class="langsw" role="group" id="langsw" aria-label="Language / भाषा">
+      <button class="langsw__btn is-on" type="button" data-lang="en" aria-pressed="true">English</button>
+      <button class="langsw__btn" type="button" data-lang="hi" aria-pressed="false">हिंदी</button>
+    </div>
   </div>
 </header>
 
@@ -41,30 +45,30 @@
   <section class="screen is-active" id="s-intro" aria-labelledby="intro-h">
     <p class="eyebrow" data-role="event-label">Welocity Life Science &nbsp;·&nbsp; DNAWellCode</p>
 
-    <h1 id="intro-h" class="display">How much of your health<br>are you still <em>guessing</em>?</h1>
+    <h1 id="intro-h" class="display" data-i18n-html="introH">How much of your health<br>are you still <em>guessing</em>?</h1>
 
-    <p class="lede">
+    <p class="lede" data-i18n="introLede">
       You may eat carefully, stay active and spend real money on your health — and still
       have important things about your body that you have never measured or personalised.
     </p>
 
-    <p class="lede lede--tight">
+    <p class="lede lede--tight" data-i18n-html="introLede2">
       Answer a few simple questions to find your <strong>Wellness Blind Spot Score</strong>.
     </p>
 
     <ul class="facts" role="list">
-      <li><span class="facts__k">15 questions</span><span class="facts__v">about two minutes</span></li>
-      <li><span class="facts__k">No medical records</span><span class="facts__v">nothing to look up</span></li>
-      <li><span class="facts__k">Free</span><span class="facts__v">no sign-up needed</span></li>
+      <li><span class="facts__k" data-i18n="fact1k">15 questions</span><span class="facts__v" data-i18n="fact1v">about two minutes</span></li>
+      <li><span class="facts__k" data-i18n="fact2k">No medical records</span><span class="facts__v" data-i18n="fact2v">nothing to look up</span></li>
+      <li><span class="facts__k" data-i18n="fact3k">Free</span><span class="facts__v" data-i18n="fact3v">no charge, no obligation</span></li>
     </ul>
 
-    <button class="btn btn--primary btn--lg" type="button" data-action="start">
+    <button class="btn btn--primary btn--lg" type="button" data-action="start" data-i18n="startBtn">
       Start my free assessment
     </button>
 
-    <p class="microcopy">Free. No sign-up. No obligation to talk to anyone afterwards.</p>
+    <p class="microcopy" data-i18n="introMicro">Free. Takes about two minutes.</p>
 
-    <p class="note note--intro">
+    <p class="note note--intro" data-i18n-html="introNote">
       This is an educational awareness assessment, not a medical test. A higher score means
       there may be more areas where you currently lack personalised information — it does
       <strong>not</strong> mean you are unhealthy.
@@ -73,44 +77,57 @@
 
   <!-- ============ 2 · DETAILS ============ -->
   <section class="screen" id="s-details" aria-labelledby="details-h" hidden>
-    <p class="eyebrow">Before we start</p>
-    <h2 id="details-h" class="h2">A few optional details</h2>
-    <p class="lede lede--tight">
-      Only used to personalise your result and to send it to you if you want it. You can skip
-      every one of them.
+    <p class="eyebrow" data-i18n="detailsEyebrow">Before we start</p>
+    <h2 id="details-h" class="h2" data-i18n="detailsH">Your details</h2>
+    <p class="lede lede--tight" data-i18n="detailsLede">
+      We need these so our team can share your result with you and answer your questions
+      afterwards. They are not shown to anyone else.
     </p>
 
     <form id="details-form" novalidate>
       <div class="field">
-        <label class="label" for="f-name">First name <span class="opt">optional</span></label>
-        <input class="input" type="text" id="f-name" name="name" autocomplete="given-name"
-               maxlength="40" placeholder="e.g. Rhea" enterkeyhint="next">
+        <label class="label" for="f-name" data-i18n="labelName">Full name</label>
+        <input class="input" type="text" id="f-name" name="name" autocomplete="name"
+               maxlength="60" placeholder="e.g. Rhea Sharma" enterkeyhint="next"
+               required aria-required="true" aria-describedby="e-name">
+        <p class="fielderr" id="e-name" role="alert" hidden></p>
       </div>
 
       <div class="field">
-        <label class="label" for="f-phone">WhatsApp number <span class="opt">optional</span></label>
+        <label class="label" for="f-phone" data-i18n="labelPhone">Mobile number</label>
         <input class="input" type="tel" id="f-phone" name="phone" autocomplete="tel"
-               inputmode="numeric" maxlength="18" placeholder="e.g. 98765 43210" enterkeyhint="next">
-        <p class="hint">So our team can send your result and answer questions. We never call unannounced.</p>
+               inputmode="numeric" maxlength="18" placeholder="e.g. 98765 43210" enterkeyhint="next"
+               required aria-required="true" aria-describedby="e-phone">
+        <p class="fielderr" id="e-phone" role="alert" hidden></p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="f-email" data-i18n="labelEmail">Email address</label>
+        <input class="input" type="email" id="f-email" name="email" autocomplete="email"
+               maxlength="80" placeholder="e.g. rhea@example.com" enterkeyhint="next"
+               required aria-required="true" aria-describedby="e-email">
+        <p class="fielderr" id="e-email" role="alert" hidden></p>
       </div>
 
       <fieldset class="field">
-        <legend class="label">Age range <span class="opt">optional</span></legend>
+        <legend class="label"><span data-i18n="labelAge">Age range</span> <span class="opt" data-i18n="optional">optional</span></legend>
         <div class="chips" id="f-age" role="radiogroup" aria-label="Age range"></div>
       </fieldset>
 
       <fieldset class="field">
-        <legend class="label">What matters most to you right now? <span class="opt">optional</span></legend>
+        <legend class="label"><span data-i18n="labelGoal">What matters most to you right now?</span> <span class="opt" data-i18n="optional">optional</span></legend>
         <div class="chips" id="f-goal" role="radiogroup" aria-label="Primary wellness goal"></div>
       </fieldset>
 
       <div class="actions">
-        <button class="btn btn--primary" type="submit">Continue</button>
-        <button class="btn btn--ghost" type="button" data-action="skip-details">Skip</button>
+        <button class="btn btn--primary btn--lg" type="submit" data-i18n="detailsContinue">Continue to the questions</button>
       </div>
     </form>
 
-    <p class="note">We never ask for medical history, conditions or medication.</p>
+    <p class="note" data-i18n="detailsNote">
+      We never ask for medical history, conditions or medication. Your details are used only
+      by Welocity to share your result and follow up — never sold or passed to anyone else.
+    </p>
   </section>
 
   <!-- ============ 3 · QUESTIONS ============ -->
@@ -130,11 +147,11 @@
 
     <div id="q-host"></div>
 
-    <p class="err" id="q-err" role="alert" hidden>Please choose an option to continue.</p>
+    <p class="err" id="q-err" role="alert" hidden data-i18n="qErr">Please choose an option to continue.</p>
 
     <div class="actions actions--split">
-      <button class="btn btn--ghost" type="button" data-action="prev">Back</button>
-      <button class="btn btn--primary" type="button" data-action="next">Next</button>
+      <button class="btn btn--ghost" type="button" data-action="prev" data-i18n="backBtn">Back</button>
+      <button class="btn btn--primary" type="button" data-action="next" data-i18n="nextBtn">Next</button>
     </div>
 
     <p class="sr-only" aria-live="polite" id="q-live"></p>
@@ -143,7 +160,7 @@
   <!-- ============ 4 · RESULT ============ -->
   <section class="screen" id="s-result" aria-labelledby="result-h" hidden>
 
-    <p class="eyebrow">Your result</p>
+    <p class="eyebrow" data-i18n="resultEyebrow">Your result</p>
     <h2 id="result-h" class="h2" data-role="result-heading">Your Wellness Blind Spot Score</h2>
 
     <div class="score">
@@ -165,19 +182,19 @@
       </div>
     </div>
 
-    <p class="note note--strong">
+    <p class="note note--strong" data-i18n-html="resultNote">
       This score reflects how much <strong>personalised clarity</strong> you currently have —
       not whether you are healthy or unhealthy.
     </p>
 
-    <h3 class="h3">Where your uncertainty is concentrated</h3>
-    <p class="sub">Your three largest blind-spot areas, based on your own answers.</p>
+    <h3 class="h3" data-i18n="resultCatsH">Where your uncertainty is concentrated</h3>
+    <p class="sub" data-i18n="resultCatsSub">Your three largest blind-spot areas, based on your own answers.</p>
     <ul class="cats" id="cat-list" role="list"></ul>
 
     <details class="disclose">
-      <summary>See all six areas and how this was calculated</summary>
+      <summary data-i18n="discloseSummary">See all six areas and how this was calculated</summary>
       <ul class="cats cats--all" id="cat-all" role="list"></ul>
-      <p class="note">
+      <p class="note" data-i18n="discloseNote">
         Every answer carries a published blind-spot value from 0 (fully personalised) to 4
         (entirely unexamined). Your score is your total divided by the maximum possible for the
         questions that applied to you. Questions you marked as not applicable are excluded
@@ -186,8 +203,8 @@
     </details>
 
     <section class="turn" aria-labelledby="turn-h">
-      <h3 class="h3" id="turn-h">The real question isn't whether you're trying.<br>It's whether your routine actually knows you.</h3>
-      <p>
+      <h3 class="h3" id="turn-h" data-i18n-html="turnH">The real question isn't whether you're trying.<br>It's whether your routine actually knows you.</h3>
+      <p data-i18n="turnP">
         Two people can eat the same food, follow the same advice and get completely different
         results. Genetics, lifestyle, environment, sleep, stress, age and medical history all play a part.
         Genetics is one factor among several — it influences how you respond, it does not decide
@@ -196,8 +213,8 @@
     </section>
 
     <section class="cta" aria-labelledby="cta-h" id="cta-block">
-      <h3 class="h3" id="cta-h">Want to know where to begin?</h3>
-      <p>
+      <h3 class="h3" id="cta-h" data-i18n="ctaH">Want to know where to begin?</h3>
+      <p data-i18n="ctaP">
         Have a free introductory conversation with our team about what your answers suggest.
         Sometimes the honest answer is that you don't need anything further.
       </p>
@@ -210,23 +227,22 @@
           <span class="wa-ico" aria-hidden="true"></span> <span data-role="wa-2-label">Talk to Laxman</span>
         </a>
       </div>
-      <p class="microcopy">Opens WhatsApp with your score filled in. Free · No obligation.</p>
+      <p class="microcopy" data-i18n="ctaMicro">Opens WhatsApp with your score filled in. Free · No obligation.</p>
 
       <p class="note note--setup" id="wa-unset" hidden>
         <strong>Setup incomplete.</strong> No WhatsApp number has been filled in yet.
         Open <code>script.js</code> and set the numbers in the <code>CONTACTS</code> list
-        in the CONFIG block at the top. This message disappears once at least one valid
-        number is set.
+        in the CONFIG block at the top.
       </p>
 
-      <p class="note note--minor" id="minor-note" hidden>
+      <p class="note note--minor" id="minor-note" hidden data-i18n="minorNote">
         You told us you're under 18. Please ask a parent or guardian to start this
         conversation with you — we don't discuss personalised wellness with minors directly.
       </p>
     </section>
 
     <div class="actions actions--center">
-      <button class="btn btn--ghost" type="button" data-action="retake">Retake assessment</button>
+      <button class="btn btn--ghost" type="button" data-action="retake" data-i18n="retakeBtn">Retake assessment</button>
     </div>
   </section>
 
@@ -234,19 +250,19 @@
 
 <footer class="foot">
   <div class="wrap">
-    <p class="foot__legal">
+    <p class="foot__legal" data-i18n-html="footLegal1">
       <strong>This assessment is for educational and wellness-awareness purposes only.</strong>
       It does not provide medical advice, diagnosis or treatment, and it does not predict health
       outcomes. It is not a substitute for a doctor, dietitian or other qualified professional.
       Speak with a qualified healthcare professional about any medical concern.
     </p>
     <p class="foot__legal">
-      <strong>Your privacy.</strong> Your answers and the optional details you enter are recorded
-      securely by Welocity Life Science so our team can share your result and follow up if you
-      would like us to. We never sell your information or pass it to anyone outside Welocity.
-      To have your entry removed, message us on WhatsApp or write to
+      <span data-i18n-html="footLegal2"><strong>Your privacy.</strong> The name, mobile number and email you enter, together with
+      your answers, are recorded securely by Welocity Life Science so our team can share your
+      result and follow up. We never sell your information or pass it to anyone outside Welocity.
+      To have your entry removed, message us on WhatsApp or write to</span>
       <a href="mailto:vp.welocitygenetics@gmail.com">vp.welocitygenetics@gmail.com</a>.
-      <button class="linkbtn" type="button" data-action="clear">Clear my answers on this device</button>
+      <button class="linkbtn" type="button" data-action="clear" data-i18n="clearBtn">Clear my answers on this device</button>
     </p>
     <p class="foot__brand">Welocity Life Science &nbsp;·&nbsp; DNAWellCode &nbsp;·&nbsp; Healthy People, Healthy Nation</p>
   </div>

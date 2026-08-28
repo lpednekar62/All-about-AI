@@ -32,8 +32,8 @@
   --line:rgba(26,20,64,.14);
   --line-soft:rgba(26,20,64,.08);
 
-  --font-h:'Manrope','Segoe UI',system-ui,-apple-system,sans-serif;
-  --font-b:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-h:'Manrope','Noto Sans Devanagari','Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-b:'Inter','Noto Sans Devanagari','Segoe UI',system-ui,-apple-system,sans-serif;
 
   --r:14px;
   --r-lg:20px;
@@ -93,7 +93,7 @@ a{color:var(--gold-ink)}
   backdrop-filter:saturate(1.4) blur(10px);
   position:sticky;top:0;z-index:10;
 }
-.topbar__in{display:flex;align-items:center;gap:11px;padding-top:13px;padding-bottom:13px;flex-wrap:wrap}
+.topbar__in{display:flex;align-items:center;gap:11px;padding-top:11px;padding-bottom:11px}
 .brand{
   display:inline-flex;align-items:center;gap:7px;
   font-family:var(--font-h);font-weight:800;font-size:16px;
@@ -106,6 +106,34 @@ a{color:var(--gold-ink)}
   color:var(--muted);font-weight:500;
   padding-left:11px;border-left:1px solid var(--line);
 }
+
+/* ---------- language switch ---------- */
+.langsw{display:inline-flex;margin-left:auto;background:rgba(26,20,64,.06);
+  border:1px solid var(--line-soft);border-radius:999px;padding:3px;gap:2px}
+.langsw__btn{
+  font-family:var(--font-h);font-size:13px;font-weight:600;line-height:1;
+  padding:8px 14px;border:0;border-radius:999px;background:transparent;
+  color:var(--muted);cursor:pointer;min-height:34px;
+  transition:background var(--t) var(--ease), color var(--t) var(--ease);
+}
+.langsw__btn:hover{color:var(--ink)}
+.langsw__btn.is-on{background:var(--ink);color:#fff}
+.langsw__btn:focus-visible{outline:2.5px solid var(--teal-deep);outline-offset:2px}
+
+/* ---------- required-field errors ---------- */
+.fielderr{color:#9B2C2C;font-size:13.5px;font-weight:500;margin:7px 0 0;line-height:1.45}
+.input[aria-invalid="true"]{border-color:#9B2C2C;background:#FFF8F8}
+.input[aria-invalid="true"]:focus{border-color:#9B2C2C;box-shadow:0 0 0 3px rgba(155,44,44,.14)}
+
+/* ---------- Devanagari sits lower and needs more room than Latin ---------- */
+.lang-hi{line-height:1.72}
+.lang-hi .display{line-height:1.26;letter-spacing:-.005em}
+.lang-hi .h2,.lang-hi .h3{line-height:1.32;letter-spacing:-.004em}
+.lang-hi .q__text{line-height:1.44;letter-spacing:-.002em}
+.lang-hi .opt-row span{line-height:1.5}
+.lang-hi .chip span,.lang-hi .langsw__btn{line-height:1.35}
+.lang-hi .progress__cat{letter-spacing:.04em;text-transform:none}
+.lang-hi .eyebrow{letter-spacing:.06em}
 
 /* ---------- screens ---------- */
 .screen{display:none;padding:38px 0 56px;animation:rise 260ms var(--ease) both}

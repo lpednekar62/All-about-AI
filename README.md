@@ -14,32 +14,53 @@ session handling for a shared booth tablet.
 
 ---
 
-## 1 · Before the exhibition — the three things to set
+## 1 · Before the exhibition — what to set
 
 Everything lives in the `CONFIG` block at the top of `script.js`.
 
 ```js
 const CONFIG = {
-  EVENT_LABEL: 'Welocity Life Science  ·  DNAWellCode',   // 1. the line above the headline
+  EVENT_LABEL: 'Welocity Life Science  ·  DNAWellCode',   // the line above the headline
 
   CONTACTS: [
-    { key: 'mumtaz', label: 'Talk to Mumtaz', number: '' },              // 2. Mumtaz's number
-    { key: 'laxman', label: 'Talk to Laxman', number: '919326082818' }
+    { key:'mumtaz', label:{ en:'Talk to Mumtaz', hi:'मुमताज़ से बात करें' }, number:'919082374527' },
+    { key:'laxman', label:{ en:'Talk to Laxman', hi:'लक्ष्मण से बात करें' }, number:'919326082818' }
   ],
 
-  SHEET_ENDPOINT: '',                                     // 3. Apps Script /exec URL
+  SHEET_ENDPOINT: 'https://script.google.com/macros/s/.../exec',
+  DEFAULT_LANG: 'en',        // 'en' or 'hi' — which language the page opens in
   ...
 };
 ```
 
 **WhatsApp numbers: digits only.** No `+`, no spaces, no brackets, no leading zero.
-India is `91`, so a 10-digit mobile becomes 12 digits total.
+India is `91`, so a 10-digit mobile becomes 12 digits total. A contact left blank is
+not rendered — the page never publishes a dead `wa.me` link.
 
-A contact left blank is simply not rendered — the page never publishes a dead
-`wa.me` link. If *both* are blank, a red setup notice appears instead of the buttons.
+---
 
-> **Still outstanding:** Mumtaz's WhatsApp number. Until it is filled in, only the
-> "Talk to Laxman" button appears.
+## 1a · Language
+
+The page ships bilingual. A switch in the header toggles **English / हिंदी** at any
+point — intro, mid-question or on the result — and the current answer selection
+survives the switch.
+
+`DEFAULT_LANG` decides which one a fresh scan opens in. English is the default; set
+it to `'hi'` if the crowd is mostly Hindi-speaking and let people switch to English.
+
+**English is canonical.** Whatever the visitor reads, the Google Sheet always
+receives English — answers, band, category names, age and goal. That keeps the data
+sortable and means the Apps Script needs no language logic. The language a visitor
+actually used is recorded in the **Event** column as `Welocity (EN)` or
+`Welocity (HI)`, which needed no extra column.
+
+Devanagari needs more vertical room than Latin, so the page adds a `lang-hi` class
+that loosens line-height on headings, questions and options. If you edit type sizes,
+check both languages.
+
+To reword anything, edit the `UI` dictionary (interface text) or the `QUESTIONS`
+array (questions and options) in `script.js`. Every entry is a `{ en, hi }` pair —
+keep both filled; a missing `hi` silently falls back to English.
 
 ---
 
@@ -60,17 +81,28 @@ A contact left blank is simply not rendered — the page never publishes a dead
 `{"ok":true,"service":"Welocity Blind Spot collector"}`. Then complete one run on the
 live page and confirm a row appears in the `Responses` tab.
 
-> If you ever edit `Code.gs`, you must **Deploy → Manage deployments → edit → New version**
-> for the change to take effect. Saving alone does not update the live Web app.
+> **Updating an already-deployed script.** Save is not enough — the live Web app runs
+> the last *deployed version*. Use **Deploy → Manage deployments → ✏️ (edit) →
+> Version: New version → Deploy**. This keeps the same `/exec` URL.
+>
+> Do **not** use "New deployment" for an update — that mints a *different* `/exec` URL
+> and the page will keep posting to the old one.
+
+### If the columns changed (e.g. Email was added)
+
+`HEADERS` is only written when the sheet is empty, and rows are appended by position.
+So after a column change: redeploy as above, then **delete the whole `Responses` tab**.
+The next submission recreates it with the correct headers. Export anything you want
+to keep first.
 
 ### What lands in the Sheet
 
-One row per completed assessment, 37 columns:
+One row per completed assessment, 38 columns:
 
 | Group | Columns |
 |---|---|
-| Identity | Received At, Submitted At, ID, Event |
-| Visitor | Name, WhatsApp, Age, Goal |
+| Identity | Received At, Submitted At, ID, Event *(carries the language)* |
+| Visitor | Name, Mobile, Email, Age, Goal |
 | Result | Score %, Band, Top Blind Spot 1–3 |
 | Breakdown | Nutrition %, Fitness %, Sleep %, Stress %, Preventive %, Genetics % |
 | Raw answers | Q1–Q15, as the text the visitor actually chose |
@@ -111,6 +143,8 @@ booth is the one failure mode that costs the whole day.
 | | Nitro Gym build | This build |
 |---|---|---|
 | Questions | Assumed a gym, a trainer and a training programme | Everyday moments anyone recognises |
+| Language | English only | English + Hindi, switchable at any point |
+| Details | All optional, skippable | Name, mobile and email required; no Skip |
 | Brand | DNAWellCode / Nitro Gym, ink-navy | Welocity, indigo-violet + cream + teal/gold |
 | Contacts | Preeti, Nishant | Mumtaz, Laxman |
 | Data | Nothing left the device | Completed runs saved to a Google Sheet |
