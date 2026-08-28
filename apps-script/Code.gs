@@ -46,6 +46,18 @@ var CAT_COLS = {
 /* 1-based column number for a header name. */
 function col_(name) { return HEADERS.indexOf(name) + 1; }
 
+/* True when the sheet's first row already matches HEADERS exactly. */
+function headersMatch_(sh) {
+  var width = sh.getLastColumn();
+  if (width < 1) return false;
+  var row = sh.getRange(1, 1, 1, width).getValues()[0];
+  if (row.length !== HEADERS.length) return false;
+  for (var i = 0; i < HEADERS.length; i++) {
+    if (String(row[i]).trim() !== HEADERS[i]) return false;
+  }
+  return true;
+}
+
 function getSheet_() {
   var ss;
   try {
@@ -56,6 +68,18 @@ function getSheet_() {
   if (!ss) throw new Error('Cannot open the spreadsheet. Check SHEET_ID.');
 
   var sh = ss.getSheetByName(SHEET_NAME);
+
+  /* If the tab exists but its header row is a different shape, appending by
+     position would silently mislabel every new row — Age landing under Email
+     and so on. Rather than ask anyone to remember to delete the tab, archive
+     it under a dated name and start a clean one. Nothing is destroyed. */
+  if (sh && sh.getLastRow() > 0 && !headersMatch_(sh)) {
+    var stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HHmm');
+    var archived = SHEET_NAME + ' (old ' + stamp + ')';
+    try { sh.setName(archived); } catch (err) { sh.setName(archived + ' ' + Math.floor(Math.random() * 999)); }
+    sh = null;
+  }
+
   if (!sh) sh = ss.insertSheet(SHEET_NAME);
 
   if (sh.getLastRow() === 0) {
@@ -88,7 +112,8 @@ function doGet() {
       spreadsheet: sh.getParent().getName(),
       sheet: sh.getName(),
       rows: Math.max(0, sh.getLastRow() - 1),
-      columns: HEADERS.length
+      columns: HEADERS.length,
+      headersReady: headersMatch_(sh)
     });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
