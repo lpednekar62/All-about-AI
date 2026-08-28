@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1A1440">
+<meta name="description" content="A two-minute educational wellness-awareness assessment from Welocity Life Science. Find out how much of your health routine is built for you specifically.">
+<meta name="robots" content="noindex">
+<title>Wellness Blind Spot Score — Welocity Life Science</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <span class="brand">
+      <span class="brand__helix" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M7 2c0 5 10 5 10 10s-10 5-10 10"/>
+          <path d="M17 2c0 5-10 5-10 10s10 5 10 10"/>
+          <path d="M8.4 6h7.2M7.2 9.5h9.6M7.2 14.5h9.6M8.4 18h7.2"/>
+        </svg>
+      </span>
+      Welocity
+    </span>
+    <span class="brand__sub">Wellness Blind Spot Score</span>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <!-- ============ 1 · LANDING ============ -->
+  <section class="screen is-active" id="s-intro" aria-labelledby="intro-h">
+    <p class="eyebrow" data-role="event-label">Welocity Life Science &nbsp;·&nbsp; DNAWellCode</p>
+
+    <h1 id="intro-h" class="display">How much of your health<br>are you still <em>guessing</em>?</h1>
+
+    <p class="lede">
+      You may train consistently, eat carefully and invest real money in your wellness — and
+      still have important things about your body that you have never measured or personalised.
+    </p>
+
+    <p class="lede lede--tight">
+      Answer a few simple questions to find your <strong>Wellness Blind Spot Score</strong>.
+    </p>
+
+    <ul class="facts" role="list">
+      <li><span class="facts__k">15 questions</span><span class="facts__v">about two minutes</span></li>
+      <li><span class="facts__k">No medical records</span><span class="facts__v">nothing to look up</span></li>
+      <li><span class="facts__k">Free</span><span class="facts__v">no sign-up needed</span></li>
+    </ul>
+
+    <button class="btn btn--primary btn--lg" type="button" data-action="start">
+      Start my free assessment
+    </button>
+
+    <p class="microcopy">Free. No sign-up. No obligation to talk to anyone afterwards.</p>
+
+    <p class="note note--intro">
+      This is an educational awareness assessment, not a medical test. A higher score means
+      there may be more areas where you currently lack personalised information — it does
+      <strong>not</strong> mean you are unhealthy.
+    </p>
+  </section>
+
+  <!-- ============ 2 · DETAILS ============ -->
+  <section class="screen" id="s-details" aria-labelledby="details-h" hidden>
+    <p class="eyebrow">Before we start</p>
+    <h2 id="details-h" class="h2">A few optional details</h2>
+    <p class="lede lede--tight">
+      Only used to personalise your result and to send it to you if you want it. You can skip
+      every one of them.
+    </p>
+
+    <form id="details-form" novalidate>
+      <div class="field">
+        <label class="label" for="f-name">First name <span class="opt">optional</span></label>
+        <input class="input" type="text" id="f-name" name="name" autocomplete="given-name"
+               maxlength="40" placeholder="e.g. Rhea" enterkeyhint="next">
+      </div>
+
+      <div class="field">
+        <label class="label" for="f-phone">WhatsApp number <span class="opt">optional</span></label>
+        <input class="input" type="tel" id="f-phone" name="phone" autocomplete="tel"
+               inputmode="numeric" maxlength="18" placeholder="e.g. 98765 43210" enterkeyhint="next">
+        <p class="hint">So our team can send your result and answer questions. We never call unannounced.</p>
+      </div>
+
+      <fieldset class="field">
+        <legend class="label">Age range <span class="opt">optional</span></legend>
+        <div class="chips" id="f-age" role="radiogroup" aria-label="Age range"></div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="label">What matters most to you right now? <span class="opt">optional</span></legend>
+        <div class="chips" id="f-goal" role="radiogroup" aria-label="Primary wellness goal"></div>
+      </fieldset>
+
+      <div class="actions">
+        <button class="btn btn--primary" type="submit">Continue</button>
+        <button class="btn btn--ghost" type="button" data-action="skip-details">Skip</button>
+      </div>
+    </form>
+
+    <p class="note">We never ask for medical history, conditions or medication.</p>
+  </section>
+
+  <!-- ============ 3 · QUESTIONS ============ -->
+  <section class="screen" id="s-quiz" aria-labelledby="quiz-h" hidden>
+    <h2 id="quiz-h" class="sr-only">Assessment questions</h2>
+
+    <div class="progress">
+      <div class="progress__meta">
+        <span id="p-count" class="progress__count">1 / 15</span>
+        <span id="p-cat" class="progress__cat"></span>
+      </div>
+      <div class="progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="15"
+           aria-valuenow="1" aria-label="Assessment progress" id="p-bar">
+        <div class="progress__fill" id="p-fill"></div>
+      </div>
+    </div>
+
+    <div id="q-host"></div>
+
+    <p class="err" id="q-err" role="alert" hidden>Please choose an option to continue.</p>
+
+    <div class="actions actions--split">
+      <button class="btn btn--ghost" type="button" data-action="prev">Back</button>
+      <button class="btn btn--primary" type="button" data-action="next">Next</button>
+    </div>
+
+    <p class="sr-only" aria-live="polite" id="q-live"></p>
+  </section>
+
+  <!-- ============ 4 · RESULT ============ -->
+  <section class="screen" id="s-result" aria-labelledby="result-h" hidden>
+
+    <p class="eyebrow">Your result</p>
+    <h2 id="result-h" class="h2" data-role="result-heading">Your Wellness Blind Spot Score</h2>
+
+    <div class="score">
+      <div class="gauge">
+        <svg viewBox="0 0 130 130" role="img" aria-labelledby="gauge-t" class="gauge__svg">
+          <title id="gauge-t" data-role="gauge-title">Score</title>
+          <circle class="gauge__bg" cx="65" cy="65" r="52" fill="none" stroke-width="9"></circle>
+          <circle class="gauge__fg" cx="65" cy="65" r="52" fill="none" stroke-width="9"
+                  stroke-linecap="round" id="gauge-arc"></circle>
+        </svg>
+        <div class="gauge__num">
+          <span id="score-num">0</span><span class="gauge__pct">%</span>
+        </div>
+      </div>
+
+      <div class="score__side">
+        <p class="score__band" id="score-band">—</p>
+        <p class="score__blurb" id="score-blurb"></p>
+      </div>
+    </div>
+
+    <p class="note note--strong">
+      This score reflects how much <strong>personalised clarity</strong> you currently have —
+      not whether you are healthy or unhealthy.
+    </p>
+
+    <h3 class="h3">Where your uncertainty is concentrated</h3>
+    <p class="sub">Your three largest blind-spot areas, based on your own answers.</p>
+    <ul class="cats" id="cat-list" role="list"></ul>
+
+    <details class="disclose">
+      <summary>See all six areas and how this was calculated</summary>
+      <ul class="cats cats--all" id="cat-all" role="list"></ul>
+      <p class="note">
+        Every answer carries a published blind-spot value from 0 (fully personalised) to 4
+        (entirely unexamined). Your score is your total divided by the maximum possible for the
+        questions that applied to you. Questions you marked as not applicable are excluded
+        from both sides of that calculation.
+      </p>
+    </details>
+
+    <section class="turn" aria-labelledby="turn-h">
+      <h3 class="h3" id="turn-h">The real question isn't whether you're trying.<br>It's whether your routine actually knows you.</h3>
+      <p>
+        Two people can follow the same diet and the same programme and get different results.
+        Genetics, lifestyle, environment, sleep, stress, age and medical history all play a part.
+        Genetics is one factor among several — it influences how you respond, it does not decide
+        your outcome.
+      </p>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-h" id="cta-block">
+      <h3 class="h3" id="cta-h">Want to know where to begin?</h3>
+      <p>
+        Have a free introductory conversation with our team about what your answers suggest.
+        Sometimes the honest answer is that you don't need anything further.
+      </p>
+
+      <div class="cta__row" id="cta-row">
+        <a class="btn btn--wa" id="wa-1" href="#" target="_blank" rel="noopener noreferrer">
+          <span class="wa-ico" aria-hidden="true"></span> <span data-role="wa-1-label">Talk to Mumtaz</span>
+        </a>
+        <a class="btn btn--wa" id="wa-2" href="#" target="_blank" rel="noopener noreferrer">
+          <span class="wa-ico" aria-hidden="true"></span> <span data-role="wa-2-label">Talk to Laxman</span>
+        </a>
+      </div>
+      <p class="microcopy">Opens WhatsApp with your score filled in. Free · No obligation.</p>
+
+      <p class="note note--setup" id="wa-unset" hidden>
+        <strong>Setup incomplete.</strong> No WhatsApp number has been filled in yet.
+        Open <code>script.js</code> and set the numbers in the <code>CONTACTS</code> list
+        in the CONFIG block at the top. This message disappears once at least one valid
+        number is set.
+      </p>
+
+      <p class="note note--minor" id="minor-note" hidden>
+        You told us you're under 18. Please ask a parent or guardian to start this
+        conversation with you — we don't discuss personalised wellness with minors directly.
+      </p>
+    </section>
+
+    <div class="actions actions--center">
+      <button class="btn btn--ghost" type="button" data-action="retake">Retake assessment</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot__legal">
+      <strong>This assessment is for educational and wellness-awareness purposes only.</strong>
+      It does not provide medical advice, diagnosis or treatment, and it does not predict health
+      outcomes. It is not a substitute for a doctor, dietitian or other qualified professional.
+      Speak with a qualified healthcare professional about any medical concern.
+    </p>
+    <p class="foot__legal">
+      <strong>Your privacy.</strong> Your answers and the optional details you enter are recorded
+      securely by Welocity Life Science so our team can share your result and follow up if you
+      would like us to. We never sell your information or pass it to anyone outside Welocity.
+      To have your entry removed, message us on WhatsApp or write to
+      <a href="mailto:vp.welocitygenetics@gmail.com">vp.welocitygenetics@gmail.com</a>.
+      <button class="linkbtn" type="button" data-action="clear">Clear my answers on this device</button>
+    </p>
+    <p class="foot__brand">Welocity Life Science &nbsp;·&nbsp; DNAWellCode &nbsp;·&nbsp; Healthy People, Healthy Nation</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
