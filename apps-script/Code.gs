@@ -21,6 +21,11 @@
  * abandons halfway is still captured, with Status left as "Started".
  */
 
+/* Bumped whenever this file changes. doGet reports it, so opening the /exec URL
+   in a browser tells you immediately WHICH deployment is running WHICH code —
+   the thing that is otherwise invisible when several deployments exist. */
+var VERSION = 'v3-get-transport';
+
 var SHEET_ID   = '18dpX9aRvMs6kDxNUPw2CXr-lj3EdgVtjQfl5gp8qC4I';
 var SHEET_NAME = 'Responses';
 
@@ -122,6 +127,8 @@ function doGet(e) {
     return json_({
       ok: true,
       service: 'Welocity Blind Spot collector',
+      version: VERSION,
+      acceptsGet: true,
       spreadsheet: sh.getParent().getName(),
       sheet: sh.getName(),
       rows: Math.max(0, sh.getLastRow() - 1),
