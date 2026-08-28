@@ -510,16 +510,33 @@ function postToSheet(payload) {
     }
   } catch (_) {}
 
-  /* 2 · POST as well. Carries payloads too long for a URL, and covers the case
-     where images are blocked. Every write upserts on the visitor id, so the two
-     transports arriving together are harmless — the second is a no-op update. */
-  try {
-    fetch(url, {
-      method:'POST', mode:'no-cors', keepalive:true, redirect:'follow',
-      headers:{ 'Content-Type':'text/plain;charset=UTF-8' }, body:body
-    }).catch(() => {});
+  /* 2 · POST as a backstop. Carries payloads too long for a URL, and covers the
+     case where images are blocked. Every write upserts on the visitor id, so a
+     duplicate arriving by this route is a harmless no-op update.
+
+     It is deliberately delayed when the GET already went out. The Apps Script
+     side serialises every write behind a script lock, so two requests fired at
+     the same instant for the same visitor queue against each other — and at a
+     busy stand, several visitors tapping Continue together would multiply that.
+     Letting the GETs through first and trickling the POSTs behind them keeps
+     the lock queue short. If the GET could not be used, the POST goes at once
+     because it is then the only route. */
+  const firePost = () => {
+    try {
+      fetch(url, {
+        method:'POST', mode:'no-cors', keepalive:true, redirect:'follow',
+        headers:{ 'Content-Type':'text/plain;charset=UTF-8' }, body:body
+      }).catch(() => {});
+    } catch (_) {}
+  };
+
+  if (sent) {
+    // jittered so a group submitting together does not re-converge
+    setTimeout(firePost, 1200 + Math.floor(Math.random() * 1800));
+  } else {
+    firePost();
     sent = true;
-  } catch (_) {}
+  }
 
   /* 3 · sendBeacon only if neither of the above could even be attempted. */
   if (!sent) {
