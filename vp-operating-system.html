@@ -1,0 +1,1453 @@
+<title>Welocity VP Command Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EDEFF1; --surface:#FFFFFF; --surface-2:#F5F7F8;
+  --ink:#111A1D; --ink-2:#3D4A4E; --ink-3:#68767B;
+  --line:#D3DADC; --line-2:#E5EAEB;
+  --accent:#00707C; --accent-ink:#00545D; --accent-wash:#DBEAEC;
+  --good:#1F6F45; --warn:#8A5A00; --crit:#A32014;
+  --good-wash:#E1EFE7; --warn-wash:#F4EBD8; --crit-wash:#F6E2DF;
+  --track:#DCE2E4;
+  --shadow:0 1px 2px rgba(17,26,29,.06), 0 4px 16px rgba(17,26,29,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1416; --surface:#161E21; --surface-2:#1C2529;
+    --ink:#E6ECEE; --ink-2:#AFBCC0; --ink-3:#7D8C91;
+    --line:#2C383C; --line-2:#212C30;
+    --accent:#4FC3CC; --accent-ink:#8AD9DF; --accent-wash:#123539;
+    --good:#5FC28C; --warn:#D9A441; --crit:#E8776A;
+    --good-wash:#13301F; --warn-wash:#31260A; --crit-wash:#331710;
+    --track:#263236;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1416; --surface:#161E21; --surface-2:#1C2529;
+  --ink:#E6ECEE; --ink-2:#AFBCC0; --ink-3:#7D8C91;
+  --line:#2C383C; --line-2:#212C30;
+  --accent:#4FC3CC; --accent-ink:#8AD9DF; --accent-wash:#123539;
+  --good:#5FC28C; --warn:#D9A441; --crit:#E8776A;
+  --good-wash:#13301F; --warn-wash:#31260A; --crit-wash:#331710;
+  --track:#263236;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  font-size:16px; line-height:1.6; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:Archivo,"Arial Narrow",system-ui,sans-serif;text-wrap:balance;margin:0}
+.mono,code,th,.tag,.eyebrow,.num{font-family:"IBM Plex Mono",ui-monospace,monospace}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);gap:0;max-width:1500px;margin:0 auto}
+nav.toc{
+  position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+  border-right:1px solid var(--line);padding:28px 20px 60px;background:var(--surface);
+}
+nav.toc .brand{font-family:Archivo;font-weight:700;font-size:15px;letter-spacing:-.01em;line-height:1.25;margin-bottom:4px}
+nav.toc .brandsub{font-size:11px;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:22px}
+nav.toc .grp{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin:20px 0 7px;padding-bottom:5px;border-bottom:1px solid var(--line-2)}
+nav.toc a{display:block;color:var(--ink-2);text-decoration:none;font-size:13.5px;padding:3.5px 0;line-height:1.35}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--accent-ink);text-decoration:underline;text-underline-offset:2px}
+nav.toc a .n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);margin-right:6px}
+main{padding:0 44px 120px;min-width:0}
+
+/* ---------- masthead ---------- */
+header.mast{padding:56px 0 34px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
+header.mast h1{font-size:clamp(34px,4.4vw,54px);font-weight:700;letter-spacing:-.025em;line-height:1.02;margin:12px 0 14px;max-width:19ch}
+header.mast .dek{font-size:18px;color:var(--ink-2);max-width:66ch;margin:0}
+.statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:32px 0 0}
+.stat{background:var(--surface);padding:16px 18px}
+.stat .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font-family:Archivo;font-weight:700;font-size:28px;letter-spacing:-.02em;line-height:1.1;margin-top:6px;font-variant-numeric:tabular-nums}
+.stat .v.hot{color:var(--crit)}
+.stat .s{font-size:12.5px;color:var(--ink-3);margin-top:3px;line-height:1.35}
+
+/* ---------- sections ---------- */
+section{padding:46px 0 8px;border-bottom:1px solid var(--line-2);scroll-margin-top:16px}
+section > h2{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.15;display:flex;gap:13px;align-items:baseline;margin-bottom:6px}
+section > h2 .n{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:500;color:var(--accent);flex:none;padding-top:2px}
+.lede{color:var(--ink-2);max-width:70ch;font-size:16.5px;margin:0 0 20px 36px}
+h3{font-size:17px;font-weight:600;letter-spacing:-.01em;margin:30px 0 9px}
+h4{font-size:14px;font-weight:600;margin:20px 0 6px}
+p,ul,ol{max-width:74ch}
+main p{margin:0 0 13px}
+ul,ol{padding-left:20px;margin:0 0 14px}
+li{margin-bottom:6px}
+.partrule{margin:60px 0 0;padding-top:26px;border-top:2px solid var(--ink)}
+.partrule .pn{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.partrule h2{font-family:Archivo;font-size:30px;font-weight:700;letter-spacing:-.025em;margin-top:5px}
+.partrule p{color:var(--ink-2);max-width:70ch;margin-top:8px}
+
+/* ---------- tables ---------- */
+.scroller{overflow-x:auto;border:1px solid var(--line);background:var(--surface);margin:14px 0 20px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--ink-3);
+  text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap;vertical-align:bottom;
+}
+td{padding:11px 13px;border-bottom:1px solid var(--line-2);vertical-align:top;line-height:1.45}
+tr:last-child td{border-bottom:0}
+td.num,th.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+td strong{font-weight:600}
+tbody tr:hover{background:var(--surface-2)}
+.tnote{font-size:12.5px;color:var(--ink-3);margin:-10px 0 20px;max-width:74ch}
+
+/* ---------- chips ---------- */
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;padding:2.5px 7px;border-radius:3px;white-space:nowrap;border:1px solid transparent}
+.t-crit{background:var(--crit-wash);color:var(--crit);border-color:var(--crit)}
+.t-warn{background:var(--warn-wash);color:var(--warn);border-color:var(--warn)}
+.t-good{background:var(--good-wash);color:var(--good);border-color:var(--good)}
+.t-flat{background:var(--surface-2);color:var(--ink-3);border-color:var(--line)}
+.t-acc{background:var(--accent-wash);color:var(--accent-ink);border-color:var(--accent)}
+
+/* ---------- meters ---------- */
+.meter{display:flex;align-items:center;gap:10px;min-width:190px}
+.meter .track{position:relative;flex:1;height:9px;background:var(--track);border-radius:2px;overflow:hidden}
+.meter .fill{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:0 4px 4px 0;box-shadow:2px 0 0 var(--surface)}
+.meter .pct{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;width:38px;text-align:right;flex:none}
+
+/* ---------- callouts ---------- */
+.call{border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--surface);padding:16px 18px;margin:20px 0;box-shadow:var(--shadow)}
+.call.danger{border-left-color:var(--crit)}
+.call.warn{border-left-color:var(--warn)}
+.call .ct{font-family:Archivo;font-weight:600;font-size:14px;letter-spacing:.01em;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.call p:last-child{margin-bottom:0}
+.call p{max-width:72ch}
+
+/* ---------- schedule blocks ---------- */
+.dayhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:26px 0 4px}
+.dayhead h3{margin:0}
+.script{background:var(--surface);border:1px solid var(--line);padding:14px 16px;margin:12px 0 18px;max-width:74ch}
+.script .lbl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+.script .say{font-size:15px;line-height:1.62;border-left:2px solid var(--accent);padding-left:13px;color:var(--ink)}
+.script .say.bad{border-left-color:var(--crit);color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--line)}
+.script .hi{font-size:15px;line-height:1.62;padding-left:13px;border-left:2px solid var(--accent-ink);margin-top:11px;color:var(--ink-2);font-style:italic}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin:16px 0 20px}
+.card{background:var(--surface);border:1px solid var(--line);padding:16px 18px}
+.card h4{margin-top:0;font-size:13px;letter-spacing:.02em}
+.card ul{margin-bottom:0;font-size:14.5px}
+.card p{font-size:14.5px}
+.dr{color:var(--crit);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.05em;font-weight:600}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  nav.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:22px 20px}
+  main{padding:0 20px 80px}
+  header.mast{padding-top:32px}
+}
+</style>
+<div class="shell">
+<nav class="toc">
+  <div class="brand">VP Command Deck</div>
+  <div class="brandsub">Welocity · FY 26–27</div>
+
+  <div class="grp">I · Diagnosis</div>
+  <a href="#s1"><span class="n">01</span>Executive Diagnosis</a>
+  <a href="#s2"><span class="n">02</span>KRA Priority Ranking</a>
+  <a href="#s3"><span class="n">03</span>KRA Gap Dashboard</a>
+  <a href="#s3b"><span class="n">03b</span>Target Ladder &amp; Payout</a>
+  <a href="#s4"><span class="n">04</span>VP Role Definition</a>
+  <a href="#s5"><span class="n">05</span>Time Allocation</a>
+
+  <div class="grp">II · The Calendar</div>
+  <a href="#s6"><span class="n">06</span>Ideal VP Day</a>
+  <a href="#s7"><span class="n">07</span>Six Day Types</a>
+  <a href="#s8"><span class="n">08</span>Ideal Week</a>
+  <a href="#s9"><span class="n">09</span>KRA Touch Cadence</a>
+  <a href="#s10"><span class="n">10</span>Communication Control</a>
+  <a href="#s11"><span class="n">11</span>Meeting Architecture</a>
+
+  <div class="grp">III · The Team</div>
+  <a href="#s12"><span class="n">12</span>Delegation Matrix</a>
+  <a href="#s13"><span class="n">13</span>Responsibility Map</a>
+  <a href="#s14"><span class="n">14</span>Delegation Scripts</a>
+  <a href="#s15"><span class="n">15</span>Escalation Matrix</a>
+  <a href="#s16"><span class="n">16</span>Daily 30-Min Team Dev</a>
+
+  <div class="grp">IV · Growth Engines</div>
+  <a href="#s17"><span class="n">17</span>Associate Activation</a>
+  <a href="#s18"><span class="n">18</span>CBO Activation</a>
+  <a href="#s19"><span class="n">19</span>Student Genomics</a>
+  <a href="#s20"><span class="n">20</span>Partnerships</a>
+
+  <div class="grp">V · Measurement</div>
+  <a href="#s21"><span class="n">21</span>VP Dashboard</a>
+  <a href="#s22"><span class="n">22</span>Daily Scorecard</a>
+  <a href="#s23"><span class="n">23</span>Weekly Review</a>
+  <a href="#s24"><span class="n">24</span>Monthly Review</a>
+
+  <div class="grp">VI · Execution</div>
+  <a href="#s25"><span class="n">25</span>30-Day Sprint</a>
+  <a href="#s26"><span class="n">26</span>90-Day Plan</a>
+  <a href="#s27"><span class="n">27</span>Stop-Doing List</a>
+  <a href="#s28"><span class="n">28</span>Automation &amp; AI</a>
+  <a href="#s29"><span class="n">29</span>Shutdown Routine</a>
+  <a href="#s30"><span class="n">30</span>Ten Daily Rules</a>
+</nav>
+
+<main>
+<header class="mast">
+  <div class="eyebrow">Laxman Pednekar · VP Sales &amp; Business Development</div>
+  <h1>Seven months, ₹11.3 crore, and 37 hours a week.</h1>
+  <p class="dek">This is not a productivity plan. It is a resource-allocation decision. Your working week is fixed and small; your gap is not. Everything below exists to move your personal hours onto the two revenue lines that are yours — and to get you out of everything else.</p>
+  <div class="statrow">
+    <div class="stat"><div class="k">Revenue gap</div><div class="v hot">₹11.30 Cr</div><div class="s">₹3.70 Cr booked of ₹15 Cr</div></div>
+    <div class="stat"><div class="k">Months left</div><div class="v">7</div><div class="s">Sep 2026 – Mar 2027</div></div>
+    <div class="stat"><div class="k">Needed / month</div><div class="v">₹1.61 Cr</div><div class="s">August did ₹1.03 Cr</div></div>
+    <div class="stat"><div class="k">Your working week</div><div class="v">37 h</div><div class="s">Mon–Fri 10:30–5, Sat 10:30–3</div></div>
+    <div class="stat"><div class="k">Plan you own</div><div class="v">47.7%</div><div class="s">ASO+CBO and SGO lines</div></div>
+  </div>
+</header>
+
+<div class="partrule">
+  <div class="pn">Part I</div>
+  <h2>Diagnosis</h2>
+  <p>What your own workbook says, including three things it says that nobody has acted on.</p>
+</div>
+
+<section id="s1">
+  <h2><span class="n">01</span>Executive Diagnosis</h2>
+  <p class="lede">Six findings. The first three come straight out of your spreadsheet and change what you should do on Monday morning.</p>
+
+  <div class="call danger">
+    <div class="ct">Finding 1 · You are not short of CBOs. You are sitting on 900 kits nobody is selling.</div>
+    <p>Your CBO roster has <strong>106 CBOs, of whom 93 have already taken kits in advance — 1,196 kits in total.</strong> You told me only 20–22 are meaningfully active. That means roughly <strong>72 CBOs are holding around 900 already-committed kits and doing nothing with them.</strong></p>
+    <p>You have been treating this as a recruitment and activation problem. It is a <strong>sell-through</strong> problem. Those kits are already paid for, already in the field, already costed. Getting those 72 CBOs to move 10 kits each over seven months is <strong>720 kits — 35% of your entire ASO+CBO gap — with zero new recruitment, zero new inventory and zero new spend.</strong></p>
+    <p>Nothing else in this plan has a return anywhere close. This is your Theory-of-Constraints bottleneck, and it has a name and a phone number attached to each of the 72.</p>
+  </div>
+
+  <div class="call danger">
+    <div class="ct">Finding 2 · Student Genomics has not stalled. It has stopped.</div>
+    <p>SGO booked 10 kits in April, 8 in May, 8 in June — and then <strong>zero in July and zero in August.</strong> Total 26 against a 1,200 target. This is not a channel running slowly; it is a channel that has flatlined for two consecutive months while carrying <strong>₹2.03 Cr of the annual plan.</strong></p>
+    <p>A line that produces nothing for two months is not behind on effort. Something structural is broken — no owner driving it, no lead source, or no offer that converts. Diagnosing which of those three it is, is a Week-1 job, not a Month-2 job.</p>
+  </div>
+
+  <div class="call danger">
+    <div class="ct">Finding 3 · You own 48% of the plan and are delivering 15% of the revenue.</div>
+    <p>ASO+CBO (₹4.99 Cr) and SGO (₹2.03 Cr) together are <strong>₹7.02 Cr — 47.7% of the ₹14.71 Cr plan</strong> — and the workbook names LAXMAN against both. In August the company booked ₹1.03 Cr. Your two lines contributed 84 kits and zero: <strong>₹15.1 lakh, about 15%.</strong></p>
+    <p>The other 85% came from Mumtaz's CCNG and UPG/UPS engine, which is broadly tracking. So the honest read is this: <em>the parts of the business you monitor are working, and the parts you own are not.</em> Your calendar is currently inverted against your accountability.</p>
+  </div>
+
+  <h3>Finding 4 · Your incentive design pays the team to ignore your biggest KRA</h3>
+  <p>You told me F-Sale carries the highest points, so Jayshree drops Associate and CBO work to chase it — and she is behaving rationally. ASO+CBO is <strong>2,045 kits and ₹4.99 Cr, the single largest revenue line in the company plan.</strong> Your scoring system currently rewards people for walking away from it. Re-weighting the points table costs one meeting and nothing else; leaving it costs the year.</p>
+
+  <h3>Finding 5 · You are the company's poster factory, and there is a designer on the payroll</h3>
+  <p>You estimate 2–3 hours at a stretch on creatives, repeatedly, because "the others don't know how and don't have a ChatGPT subscription." <strong>Fiza is a graphic designer sitting in your office.</strong> The blocker is not talent and not tooling — it is that no content calendar and no brief format exist, so every poster arrives as a fresh emergency that only you can absorb. Two AI seats cost roughly ₹4,000/month. Your time at the 85% incentive band is worth considerably more than that per hour.</p>
+
+  <h3>Finding 6 · The political geometry is unresolved, and it will decide whether any of this survives</h3>
+  <p>Mumtaz has two years more tenure, a direct and older trust line to Stan sir, and — by your own reading — resentment about reporting to you. She runs CCNG competently. That combination means every structural change you make can be re-framed upward before you get to explain it. This is not managed by being careful. It is managed by making her win visibly and by routing credit toward her deliberately. Section 13 covers the mechanism.</p>
+
+  <div class="call">
+    <div class="ct">The one-line diagnosis</div>
+    <p>You are spending your scarcest resource — 37 hours — producing creatives for channels other people own, while 900 paid-for kits sit dormant in your own network and your second-largest line has been dead for two months.</p>
+  </div>
+</section>
+
+<section id="s2">
+  <h2><span class="n">02</span>KRA Priority Ranking</h2>
+  <p class="lede">Scored on the six dimensions you specified. Ten points of the score are structural — revenue at stake and how far behind it is — so the ranking is driven by your data, not by taste.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>#</th><th>Activity</th><th class="num">Rev impact</th><th class="num">Strategic</th><th class="num">Urgency</th><th class="num">Leverage</th><th class="num">Only you</th><th class="num">Can't delegate</th><th class="num">VP Impact</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><strong>CBO dormant-stock reactivation</strong> (72 CBOs, ~900 kits)</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num"><strong>28</strong></td></tr>
+      <tr><td class="num">2</td><td><strong>Student Genomics restart</strong> — find and fix the stoppage</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">5</td><td class="num"><strong>29</strong></td></tr>
+      <tr><td class="num">3</td><td><strong>Founding-10 CBO programme</strong> — 10 kits/mo each</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num"><strong>28</strong></td></tr>
+      <tr><td class="num">4</td><td><strong>Points-system redesign</strong> — stop paying people to skip ASO/CBO</td><td class="num">4</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num"><strong>29</strong></td></tr>
+      <tr><td class="num">5</td><td><strong>Associate → CBO upgrades</strong> from 666 associates</td><td class="num">5</td><td class="num">5</td><td class="num">3</td><td class="num">5</td><td class="num">4</td><td class="num">3</td><td class="num"><strong>25</strong></td></tr>
+      <tr><td class="num">6</td><td><strong>School / institution partnerships</strong> (SGO channel)</td><td class="num">4</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num">5</td><td class="num">5</td><td class="num"><strong>27</strong></td></tr>
+      <tr><td class="num">7</td><td><strong>Building Mumtaz &amp; Chesha into true line owners</strong></td><td class="num">4</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num"><strong>28</strong></td></tr>
+      <tr><td class="num">8</td><td>Corporate / wellness tie-ups (CCN)</td><td class="num">3</td><td class="num">4</td><td class="num">2</td><td class="num">3</td><td class="num">4</td><td class="num">4</td><td class="num">20</td></tr>
+      <tr><td class="num">9</td><td>CCNG funnel monitoring</td><td class="num">4</td><td class="num">2</td><td class="num">3</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">13</td></tr>
+      <tr><td class="num">10</td><td>Creative &amp; poster production</td><td class="num">1</td><td class="num">1</td><td class="num">3</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num"><span class="tag t-crit">8</span></td></tr>
+      <tr><td class="num">11</td><td>Community posting &amp; reminders</td><td class="num">1</td><td class="num">1</td><td class="num">3</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num"><span class="tag t-crit">8</span></td></tr>
+      <tr><td class="num">12</td><td>Data collection &amp; report compilation</td><td class="num">2</td><td class="num">2</td><td class="num">3</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num"><span class="tag t-crit">11</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Scored 1–5 per dimension, 30 maximum. "Only you" = does this need your authority, judgement or relationship. "Can't delegate" = 5 means nobody else can hold it today.</p>
+
+  <div class="call warn">
+    <div class="ct">Read the bottom three rows again</div>
+    <p>Creatives, community posting and data compilation score <strong>8, 8 and 11 out of 30</strong> — and they are, by your own account, where most of your week currently goes. Your top seven activities all score 25+. That is the entire Pareto finding: <strong>you are spending peak hours on your lowest-scoring work.</strong></p>
+  </div>
+
+  <h3>Your 20% — the seven that get the calendar</h3>
+  <ol>
+    <li><strong>Student Genomics restart</strong> (29) — biggest gap, currently dead, nobody else can unblock it</li>
+    <li><strong>Points-system redesign</strong> (29) — one meeting, unlocks the whole team's direction</li>
+    <li><strong>CBO dormant-stock reactivation</strong> (28) — 720 kits already paid for and in the field</li>
+    <li><strong>Founding-10 CBO programme</strong> (28) — 100 kits/month from ten relationships</li>
+    <li><strong>Building Mumtaz &amp; Chesha as owners</strong> (28) — the only way 37 hours ever becomes enough</li>
+    <li><strong>School partnerships</strong> (27) — the structural fix under SGO</li>
+    <li><strong>Associate → CBO upgrades</strong> (25) — next year's capacity, built this year</li>
+  </ol>
+</section>
+<section id="s3">
+  <h2><span class="n">03</span>KRA Gap Dashboard</h2>
+  <p class="lede">All figures from your workbook, as of 31 Aug 2026. Five months elapsed, <strong>seven remaining</strong> (Sep 2026 – Mar 2027).</p>
+
+  <div class="scroller">
+  <table>
+    <thead><tr><th>KRA</th><th class="num">Target</th><th class="num">Actual</th><th class="num">Gap</th><th style="min-width:190px">Progress</th><th class="num">Needed / mo</th><th class="num">Running at</th><th class="num">Step-up</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Revenue</strong></td><td class="num">₹15.00 Cr</td><td class="num">₹3.70 Cr</td><td class="num">₹11.30 Cr</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:24.7%"></div></div><span class="pct">25%</span></div></td>
+        <td class="num">₹1.61 Cr</td><td class="num">₹1.03 Cr<br><span style="font-size:11px;color:var(--ink-3)">(Aug)</span></td><td class="num"><span class="tag t-warn">1.57×</span></td><td>VP</td></tr>
+
+      <tr><td><strong>Total units</strong></td><td class="num">5,490</td><td class="num">1,290</td><td class="num">4,200</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:23.5%"></div></div><span class="pct">23%</span></div></td>
+        <td class="num">600</td><td class="num">258</td><td class="num"><span class="tag t-warn">2.33×</span></td><td>VP</td></tr>
+
+      <tr><td><strong>ASO + CBO kits</strong><br><span style="font-size:12px;color:var(--ink-3)">₹4.99 Cr — largest line in the plan</span></td><td class="num">2,700</td><td class="num">655</td><td class="num">2,045</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:24.3%"></div></div><span class="pct">24%</span></div></td>
+        <td class="num">292</td><td class="num">66<br><span style="font-size:11px;color:var(--ink-3)">(ex-Apr)</span></td><td class="num"><span class="tag t-crit">4.4×</span></td><td>VP / Archana</td></tr>
+
+      <tr><td><strong>Student Genomics</strong><br><span style="font-size:12px;color:var(--ink-3)">₹2.03 Cr — zero in Jul &amp; Aug</span></td><td class="num">1,200</td><td class="num">26</td><td class="num">1,174</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:2.2%"></div></div><span class="pct">2%</span></div></td>
+        <td class="num">168</td><td class="num">0</td><td class="num"><span class="tag t-crit">stopped</span></td><td>VP / Chesha</td></tr>
+
+      <tr><td>CCNG Gold</td><td class="num">1,600</td><td class="num">156</td><td class="num">1,444</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:9.8%"></div></div><span class="pct">10%</span></div></td>
+        <td class="num">206</td><td class="num">batch-led</td><td class="num"><span class="tag t-warn">batch</span></td><td>Mumtaz</td></tr>
+
+      <tr><td>CCNG Diamond</td><td class="num">960</td><td class="num">269</td><td class="num">691</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:28%"></div></div><span class="pct">28%</span></div></td>
+        <td class="num">99</td><td class="num">batch-led</td><td class="num"><span class="tag t-good">on plan</span></td><td>Mumtaz</td></tr>
+
+      <tr><td>UPG / UPS</td><td class="num">630</td><td class="num">340</td><td class="num">290</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:54%"></div></div><span class="pct">54%</span></div></td>
+        <td class="num">41</td><td class="num">68</td><td class="num"><span class="tag t-good">ahead</span></td><td>Mumtaz</td></tr>
+
+      <tr><td>CCN <span class="tag t-flat">₹2,000 course</span></td><td class="num">1,500</td><td class="num">321</td><td class="num">1,179</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:21.4%"></div></div><span class="pct">21%</span></div></td>
+        <td class="num">168</td><td class="num">64</td><td class="num"><span class="tag t-flat">2.6×</span></td><td>Archana</td></tr>
+
+      <tr><td>Active CBOs <span style="font-size:12px;color:var(--ink-3)">(≥1 kit/mo)</span></td><td class="num">72</td><td class="num">~21</td><td class="num">51</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:29%"></div></div><span class="pct">29%</span></div></td>
+        <td class="num">+8/mo</td><td class="num">flat</td><td class="num"><span class="tag t-crit">critical</span></td><td>VP</td></tr>
+
+      <tr><td>CBOs recruiting associates</td><td class="num">40</td><td class="num">20</td><td class="num">20</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:50%"></div></div><span class="pct">50%</span></div></td>
+        <td class="num">+3/mo</td><td class="num">flat</td><td class="num"><span class="tag t-warn">dormant</span></td><td>Shagufta</td></tr>
+
+      <tr><td>School partnerships signed</td><td class="num">20</td><td class="num"><span class="dr">DATA REQ</span></td><td class="num">—</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:0%"></div></div><span class="pct">—</span></div></td>
+        <td class="num">3/mo</td><td class="num"><span class="dr">DATA REQ</span></td><td class="num">—</td><td>Chesha</td></tr>
+
+      <tr><td>Qualified leads / week</td><td class="num"><span class="dr">DATA REQ</span></td><td class="num"><span class="dr">DATA REQ</span></td><td class="num">—</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:0%"></div></div><span class="pct">—</span></div></td>
+        <td class="num">—</td><td class="num">—</td><td class="num">—</td><td>Mumtaz</td></tr>
+
+      <tr><td>Lead → sample conversion %</td><td class="num"><span class="dr">DATA REQ</span></td><td class="num"><span class="dr">DATA REQ</span></td><td class="num">—</td>
+        <td><div class="meter"><div class="track"><div class="fill" style="width:0%"></div></div><span class="pct">—</span></div></td>
+        <td class="num">—</td><td class="num">—</td><td class="num">—</td><td>VP</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote"><strong>On the ASO+CBO run rate:</strong> April booked 391 kits against 81 / 48 / 51 / 84 in May–Aug. April is an outlier and averaging it in flatters the number to 131/mo. The honest recent run rate is <strong>66/month</strong>, which is why the step-up reads 4.4× and not 2.2×. <strong>Active-CBO and recruiting-CBO targets</strong> are my proposed numbers derived from the kit maths, not company-set — confirm or overwrite them.</p>
+
+  <div class="call warn">
+    <div class="ct">The plan has a ₹83 lakh hole in it</div>
+    <p>Your Sep–Mar monthly plan for ASO+CBO totals <strong>1,850 kits</strong>, but the remaining gap is <strong>2,045</strong>. For SGO the forward plan totals <strong>900</strong> against a gap of <strong>1,174</strong>. The Apr–Aug shortfall was never redistributed into the later months.</p>
+    <p>So <strong>469 kits — about ₹83 lakh — currently sit in no month's plan at all.</strong> If every monthly number is hit exactly as written, the year still misses by that much. Either the monthly targets get raised now, or the miss is already booked.</p>
+  </div>
+
+  <h3>27% of your unit target earns 2% of your revenue</h3>
+  <p>CCN is a <strong>₹2,000 course, not a DNA kit</strong> — yet its 1,500 units sit inside the 5,490 "DNA kit" total. That is 27% of the unit scoreboard producing <strong>₹30 lakh, or 2% of plan revenue.</strong> Real DNA kits in the target are <strong>3,990</strong>, not 5,490.</p>
+  <p>This matters because your team is measured on units. Anyone optimising the unit number is being pulled toward the cheapest thing on the list. Report CCN separately from DNA kits from this month onward.</p>
+</section>
+
+<section id="s3b" style="border-bottom:1px solid var(--line-2)">
+  <h2><span class="n">03b</span>The Target Ladder — and what each rung pays you</h2>
+  <p class="lede">Your workbook contains your own commission table. It is not linear, and the non-linearity should decide your strategy.</p>
+
+  <div class="scroller">
+  <table>
+    <thead><tr><th class="num">Achieve</th><th class="num">Revenue</th><th class="num">Needed / mo</th><th class="num">vs Aug</th><th class="num">Your incentive</th><th class="num">Step gain</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td class="num">73%</td><td class="num">₹10.91 Cr</td><td class="num">₹1.03 Cr</td><td class="num">1.00×</td><td class="num">~₹3.00 L</td><td class="num">—</td><td>Where August's pace lands you</td></tr>
+      <tr><td class="num">75%</td><td class="num">₹11.25 Cr</td><td class="num">₹1.08 Cr</td><td class="num">1.05×</td><td class="num">₹3.75 L</td><td class="num">+₹0.75 L</td><td>—</td></tr>
+      <tr><td class="num">80%</td><td class="num">₹12.00 Cr</td><td class="num">₹1.19 Cr</td><td class="num">1.15×</td><td class="num">₹4.50 L</td><td class="num">+₹0.75 L</td><td>Do not stop here</td></tr>
+      <tr style="background:var(--accent-wash)"><td class="num"><strong>85%</strong></td><td class="num"><strong>₹12.75 Cr</strong></td><td class="num"><strong>₹1.29 Cr</strong></td><td class="num"><strong>1.25×</strong></td><td class="num"><strong>₹8.44 L</strong></td><td class="num"><span class="tag t-good">+₹3.94 L</span></td><td><strong>Commit here</strong></td></tr>
+      <tr><td class="num">90%</td><td class="num">₹13.50 Cr</td><td class="num">₹1.40 Cr</td><td class="num">1.36×</td><td class="num">₹9.38 L</td><td class="num">+₹0.94 L</td><td>Flattest band — poor value</td></tr>
+      <tr style="background:var(--accent-wash)"><td class="num"><strong>95%</strong></td><td class="num"><strong>₹14.25 Cr</strong></td><td class="num"><strong>₹1.51 Cr</strong></td><td class="num"><strong>1.46×</strong></td><td class="num"><strong>₹13.88 L</strong></td><td class="num"><span class="tag t-good">+₹4.50 L</span></td><td><strong>Stretch here</strong></td></tr>
+      <tr><td class="num">100%</td><td class="num">₹15.00 Cr</td><td class="num">₹1.61 Cr</td><td class="num">1.57×</td><td class="num">₹15.00 L</td><td class="num">+₹1.13 L</td><td>Official target</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call">
+    <div class="ct">Two cliffs, and you should aim at them deliberately</div>
+    <p>Crossing <strong>80% → 85%</strong> costs ₹75 lakh of revenue and pays <strong>+₹3.94 lakh</strong>. Crossing <strong>90% → 95%</strong> costs the same ₹75 lakh and pays <strong>+₹4.50 lakh</strong>. But 85% → 90% pays only ₹0.94 lakh for the identical effort.</p>
+    <p>So landing on <strong>84% or 94% is expensive</strong>, and the bands just above each cliff are where your effort is worth roughly five times more. Aim at 85%, then at 95%. Do not aim at "as much as possible" — it is a worse strategy than aiming at a rung.</p>
+  </div>
+
+  <h3>What each rung actually requires from your two lines</h3>
+  <p>In August the non-VP lines (CCNG, UPG/UPS, CCN — Mumtaz's engine) produced roughly <strong>₹88 lakh</strong>. Assume that holds. Then everything else has to come from ASO+CBO and SGO — the two lines you own:</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Rung</th><th class="num">Your lines must add / mo</th><th class="num">ASO + CBO kits / mo</th><th class="num">SGO kits / mo</th><th>Feasibility</th></tr></thead>
+    <tbody>
+      <tr><td><strong>85% · Commit</strong></td><td class="num">₹41 L</td><td class="num">150 <span style="color:var(--ink-3)">(from 66)</span></td><td class="num">80 <span style="color:var(--ink-3)">(from 0)</span></td><td><span class="tag t-good">Reachable from dormant stock alone</span></td></tr>
+      <tr><td><strong>95% · Stretch</strong></td><td class="num">₹63 L</td><td class="num">230</td><td class="num">122</td><td><span class="tag t-warn">Needs Founding-10 firing</span></td></tr>
+      <tr><td><strong>100% · Official</strong></td><td class="num">₹74 L</td><td class="num">292</td><td class="num">120–168</td><td><span class="tag t-crit">Needs both, plus schools live</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call">
+    <div class="ct">The whole strategy, in one paragraph</div>
+    <p>The 72 dormant CBOs already holding stock can produce roughly <strong>103 kits/month</strong> by selling through 10 kits each over seven months. That takes ASO+CBO from 66 to <strong>~169/month — past the 150 that the 85% rung needs.</strong> Add a Student Genomics restart at 80/month and <strong>you are at ₹12.75 Cr and ₹8.44 lakh of incentive.</strong></p>
+    <p>You do not need a new channel, a new hire or a new budget to reach the first cliff. You need 72 phone relationships to start moving inventory they have already paid for. That is what your calendar should be built around — and in Part II, it is.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <h2><span class="n">04</span>Your VP Role, Defined</h2>
+  <p class="lede">Four lists. If an activity is not on the first list, it should not be consuming a protected block.</p>
+  <div class="grid2">
+    <div class="card">
+      <h4 style="color:var(--accent-ink)">MUST DO — your judgement, authority or relationship</h4>
+      <ul>
+        <li>Tier-1 and Founding-10 CBO relationships (top 25 by stock held)</li>
+        <li>Diagnosing and restarting Student Genomics</li>
+        <li>School and institutional partnership meetings — principal-level</li>
+        <li>Pricing, offer structure and mix decisions</li>
+        <li>Points-system and incentive design</li>
+        <li>Coaching Mumtaz and Chesha into genuine line ownership</li>
+        <li>Associate → CBO upgrade conversations</li>
+        <li>Monthly strategy and the CMD review</li>
+        <li>Any deal above ₹2 lakh, and any conflict between team members</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>MUST MONITOR — dashboard, not conversation</h4>
+      <ul>
+        <li>Daily DNA sample count by channel</li>
+        <li>CCNG funnel: leads → show-up → spot close → F-sale</li>
+        <li>Kit dispatch TAT and saliva return rate</li>
+        <li>Balance payment conversion (token → full)</li>
+        <li>CBO and Associate leaderboard movement</li>
+        <li>UPG / UPS campaign results</li>
+        <li>Webinar attendance and conversion</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>MUST DELEGATE — this week</h4>
+      <ul>
+        <li>All poster and creative production → Fiza</li>
+        <li>Community posting, reminders, scheduling → Archana</li>
+        <li>Routine WhatsApp coordination → owner of each channel</li>
+        <li>Data gathering and report compilation → Archana</li>
+        <li>Meeting links, attendance sheets, webinar logistics → Sakina</li>
+        <li>First-line associate follow-up calling → Shagufta / Jayshree</li>
+        <li>CBO status-checking calls (tier 2 and 3) → Archana</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--crit)">MUST STOP — entirely</h4>
+      <ul>
+        <li>Being the first person who solves any problem raised</li>
+        <li>Making creatives because it is faster than explaining</li>
+        <li>Answering WhatsApp continuously through the working day</li>
+        <li>Personally chasing individual low-tier associates</li>
+        <li>Attending meetings where you make no decision</li>
+        <li>Re-checking work you already delegated</li>
+        <li>Late-night reel scrolling as decompression (see §29)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="s5">
+  <h2><span class="n">05</span>Time Allocation Architecture</h2>
+  <p class="lede">37 office hours plus roughly 3 hours of evening commitments — 40 hours total. Allocated before any task is placed.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Allocation</th><th class="num">%</th><th class="num">Hrs/wk</th><th>Why this share</th></tr></thead>
+    <tbody>
+      <tr><td><strong>B · Network activation</strong> (CBO + Associate)</td><td class="num">20%</td><td class="num">8.0</td><td>Largest revenue line, 4.4× step-up needed, and where the dormant stock sits</td></tr>
+      <tr><td><strong>C · Student Genomics</strong></td><td class="num">18%</td><td class="num">7.2</td><td>₹2.03 Cr at stake and currently producing zero</td></tr>
+      <tr><td><strong>A · Revenue &amp; conversion execution</strong></td><td class="num">17%</td><td class="num">6.8</td><td>Closing, offers, mix decisions, stuck high-value deals</td></tr>
+      <tr><td><strong>E · Team development</strong></td><td class="num">11%</td><td class="num">4.4</td><td>30 min daily + Saturday block — the only route out of a 37-hour ceiling</td></tr>
+      <tr><td><strong>D · Partnerships &amp; new business</strong></td><td class="num">9%</td><td class="num">3.6</td><td>Schools, corporates, wellness — feeds SGO structurally</td></tr>
+      <tr><td><strong>F · Review &amp; monitoring</strong></td><td class="num">7%</td><td class="num">2.8</td><td>15 min daily + weekly review. Dashboard-led, not meeting-led</td></tr>
+      <tr><td><strong>G · Administration</strong></td><td class="num">6%</td><td class="num"><strong>2.4</strong></td><td><span class="tag t-crit">Hard cap</span> Approvals, email, filing. When it is spent, it is spent</td></tr>
+      <tr><td><strong>H · Buffer</strong></td><td class="num">12%</td><td class="num">4.8</td><td>Emergencies, escalations, opportunities, overrun</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Buffer is 12%, below the 15–20% ideal. With a 37-hour week, a 20% buffer would cost 7.4 hours and make the gap arithmetic impossible. The evening commitments and Saturday's lighter load absorb the difference. If you find yourself repeatedly overrunning, cut administration to 4% before you cut anything else — never cut team development, which is the only line that raises your future capacity.</p>
+
+  <div class="call warn">
+    <div class="ct">The administration cap is the load-bearing rule</div>
+    <p>Administration is the only category that expands to fill whatever it is given. <strong>2.4 hours per week — roughly 24 minutes a day.</strong> It lives inside the two communication windows and the office-hours slot, and nowhere else. If an admin task will not fit there, it is a delegation candidate by definition, not an exception.</p>
+  </div>
+</section>
+<div class="partrule">
+  <div class="pn">Part II</div>
+  <h2>The Calendar</h2>
+  <p>Built onto the rhythm your company already runs — Monday SG, Tuesday CCNG, Wednesday ATP, Thursday Digi&nbsp;Ent/CCN, Friday convocation, Saturday CBO meeting — rather than replacing it with a new one.</p>
+</div>
+
+<section id="s6">
+  <h2><span class="n">06</span>The Ideal VP Day</h2>
+  <p class="lede">One skeleton, 10:30 to 5:00, that holds on every office day. Only the two theme blocks change with the day of the week.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th style="min-width:104px">Time</th><th>Block</th><th>KRA</th><th style="min-width:230px">Exact outcome</th><th style="min-width:200px">Activity</th><th>Who</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td class="num">10:30–10:45</td><td><strong>Command Start</strong></td><td>Review</td><td>Yesterday's samples known; today's Top 3 written and visible</td><td>Scan one-page dashboard, write Top 3 on paper</td><td>VP</td><td><span class="tag t-crit">Phone face-down</span></td></tr>
+      <tr><td class="num">10:45–12:15</td><td><strong>Deep Work</strong><br><span style="font-size:12px;color:var(--ink-3)">theme by day</span></td><td>Varies</td><td>One strategic artefact finished — a plan, a proposal, a redesign. Not "worked on"</td><td>Day's theme: SGO / CBO / partnership / offer design</td><td>VP</td><td><span class="tag t-crit">No WhatsApp · door shut</span></td></tr>
+      <tr><td class="num">12:15–12:45</td><td>Communication Window 1</td><td>Admin</td><td>Inbox and WhatsApp cleared to zero decisions pending</td><td>Reply, assign, schedule — in one pass</td><td>VP</td><td>30 min hard stop</td></tr>
+      <tr><td class="num">12:45–13:30</td><td><strong>CBO Contact</strong><br><span style="font-size:12px;color:var(--ink-3)">every single day</span></td><td>Network</td><td><strong>5 CBOs spoken to. Each ends with a number and a date</strong></td><td>Live calls from the Tier-1 / dormant-stock list</td><td>VP</td><td>Walk while calling</td></tr>
+      <tr><td class="num">13:30–14:00</td><td>Lunch &amp; reset</td><td>—</td><td>Actual break away from the screen</td><td>Eat. Not at desk</td><td>—</td><td>No calls</td></tr>
+      <tr><td class="num">14:00–15:00</td><td>Meeting Window</td><td>Varies</td><td>Every meeting ends with a decision and a named owner</td><td>All internal &amp; external meetings batched here</td><td>VP + team</td><td>Default 20 min, not 60</td></tr>
+      <tr><td class="num">15:00–15:30</td><td><strong>Team Development</strong></td><td>Team</td><td>One person is measurably more capable than at 15:00</td><td>Coaching rotation — see §16. Not a status update</td><td>VP + 1</td><td><span class="tag t-crit">Never cancelled</span></td></tr>
+      <tr><td class="num">15:30–16:00</td><td>Office Hours + Comms 2</td><td>Admin</td><td>Team's blocked decisions cleared in one batch</td><td>Team brings approvals &amp; escalations here</td><td>VP</td><td>Must come with 2 options</td></tr>
+      <tr><td class="num">16:00–16:45</td><td><strong>Execution / Buffer</strong></td><td>Varies</td><td>Day's second theme outcome, or absorb the overrun</td><td>Theme work, or evening-event prep</td><td>VP</td><td>Protect if unused</td></tr>
+      <tr><td class="num">16:45–17:00</td><td><strong>Shutdown</strong></td><td>Review</td><td>Scorecard marked; tomorrow's Top 3 set; desk clear</td><td>Score the day, write tomorrow, close laptop</td><td>VP</td><td>Leave at 17:00</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Saturday runs 10:30–15:00 and drops the Meeting Window and Execution block; the Team Development block doubles to 60 minutes. Evening commitments (SG hosting Monday 20:00, CBO meeting Saturday 20:00) sit outside this and take their prep from the 16:00 block.</p>
+
+  <div class="call">
+    <div class="ct">Why there is no "peak energy" block</div>
+    <p>You said there is no particular hour when you think best — that when you are focused, your thinking is sharp regardless of time or place. That is unusual and it is useful: it means <strong>you are not energy-limited, you are interruption-limited.</strong></p>
+    <p>So this day is not built around a biological peak. It is built around one 90-minute wall early enough that the day has not yet claimed you, and a fixed ritual to enter it. The 15-minute Command Start exists purely as the on-ramp — you told me that when something interrupts, you get distracted and lose the thread. The ritual is what makes the block start; the wall is what makes it survive.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <h2><span class="n">07</span>Six Day Types</h2>
+  <p class="lede">The skeleton stays. These are the variations you actually run.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h4><span class="tag t-acc">A</span> Strategy / Deep Work Day</h4>
+      <p><strong>When:</strong> Monday and Wednesday.</p>
+      <p><strong>Change:</strong> Deep Work extends to 10:45–13:00 (135 min). Meeting Window shrinks to 30 min. Maximum two meetings all day.</p>
+      <p><strong>Produces:</strong> The SGO restart plan, the school proposal, the offer redesign, the points-system rewrite.</p>
+    </div>
+    <div class="card">
+      <h4><span class="tag t-acc">B</span> Sales / Conversion Day</h4>
+      <p><strong>When:</strong> Tuesday and Friday (CCNG / convocation days).</p>
+      <p><strong>Change:</strong> CBO Contact extends to 90 min. Meeting Window becomes a call block. Deep Work drops to 60 min.</p>
+      <p><strong>Produces:</strong> Closed deals, unstuck pipeline, balance payments recovered.</p>
+    </div>
+    <div class="card">
+      <h4><span class="tag t-acc">C</span> Team / Activation Day</h4>
+      <p><strong>When:</strong> Wednesday (ATP day) and Saturday.</p>
+      <p><strong>Change:</strong> Team Development becomes 60–90 min. ATP training attendance replaces the Meeting Window.</p>
+      <p><strong>Produces:</strong> Trained CBOs and associates who sell without you present.</p>
+    </div>
+    <div class="card">
+      <h4><span class="tag t-acc">D</span> External / Partnership Day</h4>
+      <p><strong>When:</strong> Thursday, plus one field day a fortnight.</p>
+      <p><strong>Change:</strong> Out of office 11:00–16:00. Two to three school or corporate meetings clustered by geography. Comms windows move to travel time.</p>
+      <p><strong>Produces:</strong> Signed MOUs. Target three per month.</p>
+    </div>
+    <div class="card">
+      <h4><span class="tag t-acc">E</span> Webinar / Event Day</h4>
+      <p><strong>When:</strong> Monday (SG 20:00), Saturday (CBO 20:00), batch launches.</p>
+      <p><strong>Change:</strong> 16:00 block becomes prep. Leave office 17:00 sharp. Event 20:00–21:30. <strong>Next morning's Deep Work is the follow-up plan</strong> — never the event itself again.</p>
+      <p><strong>Produces:</strong> Leads that get worked within 12 hours, not forgotten.</p>
+    </div>
+    <div class="card">
+      <h4><span class="tag t-acc">F</span> Travel / Low-Control Day</h4>
+      <p><strong>Change:</strong> No deep work attempted — you will lose it and feel worse. Convert entirely to voice: the 5 CBO calls become 15 CBO calls. Voice-note your decisions to Archana rather than typing.</p>
+      <p><strong>Produces:</strong> The month's dormant-CBO contact quota, cleared in a day.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s8">
+  <h2><span class="n">08</span>The Ideal Week</h2>
+  <p class="lede">Aligned to the company calendar already in your workbook, so this asks nobody to change their day but you.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Day</th><th>Company rhythm</th><th>Your theme</th><th>Type</th><th style="min-width:250px">The week's outcome from this day</th><th>Evening</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Monday</strong></td><td>SG day</td><td><strong>Student Genomics</strong></td><td><span class="tag t-acc">A</span></td><td>SGO pipeline advanced: schools contacted, parent webinar booked, one structural blocker removed</td><td><strong>SG hosting 20:00</strong></td></tr>
+      <tr><td><strong>Tuesday</strong></td><td>CCNG</td><td><strong>Revenue &amp; conversion</strong></td><td><span class="tag t-acc">B</span></td><td>Month's run-rate reviewed against ₹1.29 Cr; interventions decided; stuck deals unstuck</td><td>—</td></tr>
+      <tr><td><strong>Wednesday</strong></td><td>ATP / webinar batch</td><td><strong>CBO activation</strong></td><td><span class="tag t-acc">A</span>&nbsp;<span class="tag t-acc">C</span></td><td>Dormant-stock CBOs worked; Founding-10 reviewed 1:1; ATP training attended</td><td>Digital webinar</td></tr>
+      <tr><td><strong>Thursday</strong></td><td>Digi Ent / CCN</td><td><strong>Partnerships &amp; new business</strong></td><td><span class="tag t-acc">D</span></td><td>School / corporate meetings held; one proposal sent; MOU pipeline moved</td><td>—</td></tr>
+      <tr><td><strong>Friday</strong></td><td>CCNG convocation</td><td><strong>Associate activation</strong></td><td><span class="tag t-acc">B</span></td><td>Fresh graduates combed for associate-ready candidates; top associates pitched CBO upgrade</td><td>—</td></tr>
+      <tr><td><strong>Saturday</strong><br><span style="font-size:12px;color:var(--ink-3)">10:30–15:00</span></td><td>CBO meeting</td><td><strong>Team development &amp; weekly close</strong></td><td><span class="tag t-acc">C</span></td><td>Weekly review completed with decisions; team coached; next week's Top 3 set</td><td><strong>CBO meeting 20:00</strong></td></tr>
+      <tr><td>Sunday</td><td>Digital Entrepreneurship</td><td><span class="tag t-good">Protected — family &amp; recovery</span></td><td>—</td><td>You return on Monday able to think. That is the outcome</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call">
+    <div class="ct">Every KRA now has a named day</div>
+    <p>SGO gets Monday's full deep block plus Thursday's school work — roughly 1.5 days a week for the line that is currently at zero. CBO activation gets Wednesday plus 45 minutes every single day. Nothing here depends on "if I get time."</p>
+    <p>The one thing this week deliberately does <em>not</em> give a day to is CCNG. That is correct: it is tracking, Mumtaz owns it, and it appears in your week only as a dashboard row and a Tuesday check.</p>
+  </div>
+</section>
+
+<section id="s9">
+  <h2><span class="n">09</span>KRA Touch Cadence</h2>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>KRA</th><th>Cadence</th><th>Form it takes</th><th>Escalates to you when</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ASO + CBO kits</strong></td><td><span class="tag t-acc">Daily</span></td><td>5 live CBO calls, 12:45–13:30, every day without exception</td><td>Any Founding-10 CBO does zero for 14 days</td></tr>
+      <tr><td><strong>Student Genomics</strong></td><td><span class="tag t-acc">2–3× weekly</span></td><td>Monday deep block, Thursday school meetings, Saturday review with Chesha</td><td>Any week with zero new school conversations</td></tr>
+      <tr><td>Revenue vs run rate</td><td><span class="tag t-acc">Daily</span> glance, <span class="tag t-acc">weekly</span> deep</td><td>Dashboard at 10:30; full review Saturday</td><td>Month tracking below ₹1.29 Cr pace at day 15</td></tr>
+      <tr><td>Total DNA samples</td><td><span class="tag t-acc">Daily</span></td><td>One number on the dashboard, split kit vs CCN course</td><td>Three consecutive days below 20</td></tr>
+      <tr><td>Active CBO count</td><td><span class="tag t-acc">Weekly</span></td><td>Saturday review — the count that matters, not kit totals</td><td>Count falls week-on-week</td></tr>
+      <tr><td>Associate activation</td><td><span class="tag t-acc">Weekly</span></td><td>Friday block + Shagufta's calling report</td><td>Conversion from ATP attendance to first sale under 10%</td></tr>
+      <tr><td>School partnerships</td><td><span class="tag t-acc">Weekly</span></td><td>Thursday meetings; MOU pipeline reviewed Monday</td><td>Fewer than 3 signed in a month</td></tr>
+      <tr><td>CCNG funnel</td><td><span class="tag t-acc">Daily</span> dashboard only</td><td>Numbers reach you. You do not chase them</td><td>Show-up rate drops below its 4-week average</td></tr>
+      <tr><td>Kit dispatch &amp; saliva return</td><td><span class="tag t-acc">Weekly</span> exception</td><td>Exception list only — never the full list</td><td>Dispatch TAT over 48 h, or return rate under 80%</td></tr>
+      <tr><td>Team capability</td><td><span class="tag t-acc">Daily</span> 30 min</td><td>Rotation in §16</td><td>Never. This one is never skipped</td></tr>
+      <tr><td>Strategy &amp; mix</td><td><span class="tag t-acc">Monthly</span></td><td>90-minute review, first working day</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="s10">
+  <h2><span class="n">10</span>Communication Control</h2>
+  <p class="lede">Three windows a day, totalling 75 minutes. Outside them, only genuine escalation reaches you.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Window</th><th class="num">Time</th><th>Covers</th><th>Discipline</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Window 1</strong></td><td class="num">12:15–12:45</td><td>WhatsApp, email, overnight messages</td><td>One pass. Reply, delegate or schedule — never re-open the same message twice</td></tr>
+      <tr><td><strong>Window 2</strong></td><td class="num">15:30–16:00</td><td>Team approvals, decisions, escalations</td><td>Doubles as Office Hours. Team comes to you, in person, in this half hour</td></tr>
+      <tr><td><strong>Window 3</strong></td><td class="num">17:45–18:00</td><td>End-of-day sweep before evening commitments</td><td>15 minutes. Anything not urgent waits for tomorrow's Window 1</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>What actually counts as urgent</h3>
+  <div class="grid2">
+    <div class="card" style="border-left:3px solid var(--crit)">
+      <h4 style="color:var(--crit)">Genuinely urgent — interrupt anything</h4>
+      <ul>
+        <li>A customer is publicly complaining or threatening reputation damage</li>
+        <li>A deal above ₹2 lakh will be lost today without your decision</li>
+        <li>Stan sir needs something now</li>
+        <li>A payment or lab failure is blocking sample processing</li>
+        <li>A CBO or partner is about to walk away</li>
+        <li>Anything legal, medical or safety-related</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Not urgent — waits for a window</h4>
+      <ul>
+        <li>"Sir, ye approve kar dijiye" on anything routine</li>
+        <li>Creative feedback and poster approvals</li>
+        <li>Status updates and "just informing you"</li>
+        <li>Scheduling and coordination</li>
+        <li>A question with an answer already in an SOP</li>
+        <li>Anything a dashboard already shows</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="script">
+    <div class="lbl">Announce it once, to the whole team, in this form</div>
+    <div class="say">"आज से मैं WhatsApp पूरे दिन नहीं देखूँगा — मैं तीन बार देखूँगा: 12:15, 3:30 और 5:45. Agar कोई चीज़ इन तीनों में से किसी का इंतज़ार नहीं कर सकती, तो मुझे <strong>call</strong> कीजिए, message मत कीजिए. Call का मतलब है urgent, और urgent का मतलब है customer, payment, ₹2 लाख से ऊपर की deal, या Stan sir. बाकी सब window में."</div>
+    <div class="hi">The rule only works if a call is the escape hatch. Without one, people invent emergencies to get past the wall.</div>
+  </div>
+</section>
+
+<section id="s11">
+  <h2><span class="n">11</span>Meeting Architecture</h2>
+  <p class="lede">Audited against your four tests: is a decision required, is collaboration required, could it be a dashboard, could it be asynchronous.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Meeting</th><th class="num">Now</th><th>Verdict</th><th class="num">Becomes</th><th>Change</th></tr></thead>
+    <tbody>
+      <tr><td>Daily team status / update round</td><td class="num">30–45 m</td><td><span class="tag t-crit">Remove</span></td><td class="num">0</td><td>Replaced entirely by the dashboard. Status is not a meeting</td></tr>
+      <tr><td>CBO meeting (Saturday 20:00)</td><td class="num">60–90 m</td><td><span class="tag t-good">Keep</span></td><td class="num">60 m</td><td>Restructure: 20 min recognition, 20 min training, 20 min commitments with numbers</td></tr>
+      <tr><td>SG hosting (Monday 20:00)</td><td class="num">60–90 m</td><td><span class="tag t-good">Keep</span></td><td class="num">as is</td><td>Add: every attendee leaves with a named next step and an owner</td></tr>
+      <tr><td>CMD / Stan sir review</td><td class="num"><span class="dr">not happening</span></td><td><span class="tag t-acc">Create</span></td><td class="num">45 m</td><td><strong>Saturday 11:00, weekly.</strong> You flagged this gap yourself — it is the most important missing meeting</td></tr>
+      <tr><td>Weekly VP review</td><td class="num">—</td><td><span class="tag t-acc">Create</span></td><td class="num">45 m</td><td>Saturday 12:00, ends in decisions (§23)</td></tr>
+      <tr><td>Founding-10 CBO 1:1</td><td class="num">—</td><td><span class="tag t-acc">Create</span></td><td class="num">15 m</td><td>Wednesday, two per week rotating — each of the ten seen fortnightly</td></tr>
+      <tr><td>Creative / poster discussion</td><td class="num">ad hoc</td><td><span class="tag t-crit">Delegate</span></td><td class="num">0</td><td>Replaced by a monthly content calendar + written briefs to Fiza</td></tr>
+      <tr><td>Ad-hoc problem-solving with team</td><td class="num">scattered</td><td><span class="tag t-warn">Batch</span></td><td class="num">30 m</td><td>Becomes Office Hours, 15:30–16:00 daily</td></tr>
+      <tr><td>Webinar logistics coordination</td><td class="num">ad hoc</td><td><span class="tag t-crit">Delegate</span></td><td class="num">0</td><td>Sakina owns entirely. You see the attendance number only</td></tr>
+      <tr><td>Monthly strategy review</td><td class="num">—</td><td><span class="tag t-acc">Create</span></td><td class="num">90 m</td><td>First working day of each month (§24)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Default meeting length is <strong>20 minutes</strong>, not 60. A meeting with no decision required is a document. Every meeting ends with: what was decided, who owns it, by when.</p>
+</section>
+<div class="partrule">
+  <div class="pn">Part III</div>
+  <h2>The Team</h2>
+  <p>Seven people, of whom two can take an outcome and five need a checklist. Standard delegation advice assumes everyone is in the first group. Yours is not, so the system below runs two tracks.</p>
+</div>
+
+<section id="s12">
+  <h2><span class="n">12</span>Delegation Matrix</h2>
+  <p class="lede">Classified <span class="tag t-flat">D1</span> delegate completely · <span class="tag t-flat">D2</span> delegate + review · <span class="tag t-flat">D3</span> delegate + you approve final · <span class="tag t-flat">D4</span> VP only.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Task</th><th>Why not you</th><th>New owner</th><th style="min-width:210px">Exact expected outcome</th><th>Check-in</th><th>Escalate only if</th><th class="num">Class</th></tr></thead>
+    <tbody>
+      <tr><td><strong>All poster &amp; creative production</strong></td><td>Scores 8/30. Costs you ~10 h/week. A designer is on the payroll</td><td><strong>Fiza</strong></td><td>Every creative on the monthly calendar delivered 3 days before it is needed</td><td>Weekly, Monday</td><td>A brand or pricing claim is involved</td><td class="num"><span class="tag t-acc">D3</span></td></tr>
+      <tr><td>Monthly content calendar</td><td>Planning once beats improvising thirty times</td><td><strong>Chesha</strong> drafts</td><td>Next month's posts, reminders and campaign creatives listed by date, by the 25th</td><td>Monthly</td><td>A new campaign is being launched</td><td class="num"><span class="tag t-acc">D3</span></td></tr>
+      <tr><td>WhatsApp community posting &amp; reminders</td><td>Pure execution once a calendar exists</td><td><strong>Archana</strong></td><td>Every scheduled post live on the day, in every community, without a reminder from you</td><td>Daily 15:30</td><td>A community member raises a complaint</td><td class="num"><span class="tag t-acc">D1</span></td></tr>
+      <tr><td>Dormant-CBO status calling (tiers 2–3)</td><td>You take the top 25; these 47 need contact, not seniority</td><td><strong>Shagufta</strong></td><td>Every dormant CBO contacted fortnightly; stock position and blocker logged</td><td>Weekly, Friday</td><td>A CBO wants to return stock or exit</td><td class="num"><span class="tag t-acc">D2</span></td></tr>
+      <tr><td>Associate calling &amp; ATP follow-up</td><td>Volume voice work — her actual strength</td><td><strong>Shagufta</strong> + <strong>Jayshree</strong></td><td>100% of ATP attendees called within 48 h; first-sale conversion logged</td><td>Weekly, Friday</td><td>Conversion falls below 10%</td><td class="num"><span class="tag t-acc">D2</span></td></tr>
+      <tr><td>Dashboard compilation</td><td>You should read numbers, not assemble them</td><td><strong>Archana</strong></td><td>One-page dashboard (§21) filled and sent by 09:30 daily</td><td>Daily on arrival</td><td>A number cannot be sourced</td><td class="num"><span class="tag t-acc">D1</span></td></tr>
+      <tr><td>Webinar logistics — links, reminders, attendance</td><td>Zero judgement required</td><td><strong>Sakina</strong></td><td>Link live 24 h prior; 3 reminders sent; attendance sheet within 2 h of close</td><td>Per event</td><td>Technical failure during a live session</td><td class="num"><span class="tag t-acc">D1</span></td></tr>
+      <tr><td>Kit dispatch &amp; saliva-return tracking</td><td>Exception management, not VP work</td><td><strong>Sakina</strong></td><td>Dispatch within 48 h; weekly exception list of non-returns only</td><td>Weekly</td><td>TAT over 48 h or returns under 80%</td><td class="num"><span class="tag t-acc">D2</span></td></tr>
+      <tr><td>Balance-payment follow-up</td><td>Scripted, repeatable chase</td><td><strong>Sakina</strong> under Mumtaz</td><td>100% of token payers contacted before batch start; conversion reported</td><td>Per batch</td><td>A customer disputes or asks for a refund</td><td class="num"><span class="tag t-acc">D1</span></td></tr>
+      <tr><td>Entire CCNG funnel</td><td>She already runs it and it is tracking</td><td><strong>Mumtaz</strong></td><td>Gold, Diamond and UPG/UPS monthly numbers hit; you see the dashboard only</td><td>Weekly review</td><td>A month tracks 20%+ below plan</td><td class="num"><span class="tag t-acc">D1</span></td></tr>
+      <tr><td>Student Genomics execution</td><td>She owns the line; you own the strategy and the school relationships</td><td><strong>Chesha</strong></td><td>80 SGO kits/month by November; parent webinars running through CBOs</td><td>Weekly, Monday</td><td>A month is below 50% of target</td><td class="num"><span class="tag t-acc">D2</span></td></tr>
+      <tr><td>School outreach — first contact &amp; scheduling</td><td>You should walk in, not cold-call</td><td><strong>Shagufta</strong></td><td>3 principal meetings booked in your Thursday slot each week</td><td>Weekly, Monday</td><td>A school asks for pricing or a proposal</td><td class="num"><span class="tag t-acc">D2</span></td></tr>
+      <tr><td>CBO onboarding paperwork &amp; kit design coordination</td><td>Process, not judgement</td><td><strong>Archana</strong></td><td>New CBO fully set up within 7 days of signing</td><td>Weekly</td><td>Custom branding cost is involved</td><td class="num"><span class="tag t-acc">D1</span></td></tr>
+      <tr><td>Meeting scheduling &amp; calendar coordination</td><td>You should never negotiate a time slot</td><td><strong>Archana</strong></td><td>Meetings booked only into the 14:00–15:00 window unless you say otherwise</td><td>—</td><td>Stan sir or an external partner requests otherwise</td><td class="num"><span class="tag t-acc">D1</span></td></tr>
+      <tr><td colspan="7" style="background:var(--surface-2);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-family:'IBM Plex Mono',monospace">D4 — these stay with you</td></tr>
+      <tr><td>Top-25 CBO relationships &amp; Founding-10 1:1s</td><td>—</td><td><strong>VP</strong></td><td>Each Founding-10 CBO at 10 kits/month by December</td><td>—</td><td>—</td><td class="num"><span class="tag t-crit">D4</span></td></tr>
+      <tr><td>Pricing, offers and channel mix</td><td>—</td><td><strong>VP</strong></td><td>Mix decision made and communicated by 15 Sep</td><td>—</td><td>—</td><td class="num"><span class="tag t-crit">D4</span></td></tr>
+      <tr><td>Points-system / incentive design</td><td>—</td><td><strong>VP</strong></td><td>Rewritten and announced in week 1</td><td>—</td><td>—</td><td class="num"><span class="tag t-crit">D4</span></td></tr>
+      <tr><td>School &amp; corporate partnership negotiation</td><td>—</td><td><strong>VP</strong></td><td>3 signed MOUs per month from October</td><td>—</td><td>—</td><td class="num"><span class="tag t-crit">D4</span></td></tr>
+      <tr><td>Associate → CBO upgrade conversations</td><td>—</td><td><strong>VP</strong></td><td>5 upgrades per month from October</td><td>—</td><td>—</td><td class="num"><span class="tag t-crit">D4</span></td></tr>
+      <tr><td>Team coaching, performance and conflict</td><td>—</td><td><strong>VP</strong></td><td>30 minutes daily, never skipped</td><td>—</td><td>—</td><td class="num"><span class="tag t-crit">D4</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call warn">
+    <div class="ct">Archana is already overloaded — so read this table as a swap, not an addition</div>
+    <p>She takes on dashboard compilation, community posting, onboarding and scheduling. In exchange she hands <strong>CCN entirely</strong> to Jayshree (whose points now favour it) and stops all ad-hoc data-gathering requests, which go through the dashboard instead. If you add without removing, she will drop something silently — you have already seen this happen once.</p>
+  </div>
+
+  <h3>The delegation decision rule</h3>
+  <p>Before any task enters your day, four questions. If the answer to all four is no, it is not yours:</p>
+  <ol>
+    <li>Does this need <strong>my authority</strong> — can nobody else approve it?</li>
+    <li>Does this need <strong>my judgement</strong> — is it genuinely ambiguous?</li>
+    <li>Does this need <strong>my relationship</strong> — would it fail with anyone else's name on it?</li>
+    <li>Does me doing this personally create <strong>disproportionate value</strong> — not just faster, but materially better?</li>
+  </ol>
+  <p>"It is quicker if I do it" is not a yes to any of these. That reasoning is exactly how you became the poster factory.</p>
+</section>
+<section id="s13">
+  <h2><span class="n">13</span>Team Responsibility Map</h2>
+  <p class="lede">Read honestly, from what you told me. The "Delegation track" column is the operative one.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Person</th><th>Owns today</th><th class="num">Reliability</th><th class="num">Decides alone</th><th>Real strength</th><th>Real risk</th><th>Delegation track</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Mumtaz</strong><br><span style="font-size:12px;color:var(--ink-3)">RM · CCNG</span></td>
+        <td>CCNG Gold, Diamond, UPG/UPS — ₹7.4 Cr of plan</td>
+        <td class="num"><span class="tag t-good">High</span></td>
+        <td class="num"><span class="tag t-good">High</span><br><span style="font-size:11px;color:var(--ink-3)">in domain</span></td>
+        <td>Knows the work cold, genuinely sells, delivers her line without supervision</td>
+        <td>Cannot lead people — flares at juniors. Older, more-trusted line to Stan sir. Feels under-credited</td>
+        <td><span class="tag t-acc">Outcome</span> Give her the whole line and the title</td>
+      </tr>
+      <tr>
+        <td><strong>Chesha</strong><br><span style="font-size:12px;color:var(--ink-3)">Student Genomics</span></td>
+        <td>SGO — ₹2.03 Cr of plan, currently producing zero</td>
+        <td class="num"><span class="tag t-good">High</span></td>
+        <td class="num"><span class="tag t-good">High</span></td>
+        <td>The one person who can be handed anything and will find a way. Brings her own ideas</td>
+        <td>Believes she is the smartest in the room; mildly manipulative; currently in a low mood</td>
+        <td><span class="tag t-acc">Outcome</span> Ownership with a public number</td>
+      </tr>
+      <tr>
+        <td><strong>Archana</strong><br><span style="font-size:12px;color:var(--ink-3)">Support · CCN, ASO/CBO</span></td>
+        <td>CCN, posting, reminders, ASO/CBO assist</td>
+        <td class="num"><span class="tag t-warn">Medium</span></td>
+        <td class="num"><span class="tag t-crit">Low</span></td>
+        <td>Willing, honest, ambitious, will do exactly what is asked</td>
+        <td>Cannot hold 3–4 parallel tasks; no prioritisation; disorganised; already feels overloaded</td>
+        <td><span class="tag t-flat">Checklist</span> <strong>One task at a time, with a deadline</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Shagufta</strong><br><span style="font-size:12px;color:var(--ink-3)">Calling · Associates</span></td>
+        <td>Associate calling, assists Archana</td>
+        <td class="num"><span class="tag t-good">High</span></td>
+        <td class="num"><span class="tag t-crit">Low</span></td>
+        <td>Genuinely good on the phone; strong communication; never refuses work; gives her best</td>
+        <td>Not tech-capable; slow; cannot work anything out unaided — must be taught first</td>
+        <td><span class="tag t-flat">Checklist</span> Voice roles only, never tech</td>
+      </tr>
+      <tr>
+        <td><strong>Sakina</strong><br><span style="font-size:12px;color:var(--ink-3)">F-Cell · under Mumtaz</span></td>
+        <td>F-Sale cell, assists Mumtaz and partly Chesha</td>
+        <td class="num"><span class="tag t-good">High</span></td>
+        <td class="num"><span class="tag t-crit">Low</span></td>
+        <td>Steady, quiet, consistent. Give her one defined task and it gets done well</td>
+        <td>Overthinks; spends time on things nobody assigned her</td>
+        <td><span class="tag t-flat">Checklist</span> Needs an explicit <em>not</em>-your-job list</td>
+      </tr>
+      <tr>
+        <td><strong>Jayshree</strong><br><span style="font-size:12px;color:var(--ink-3)">Associates · under Shagufta</span></td>
+        <td>Associate support — but chases F-Sale for points</td>
+        <td class="num"><span class="tag t-crit">Low</span></td>
+        <td class="num"><span class="tag t-crit">Low</span></td>
+        <td>Experienced; capable when the incentive points the right way</td>
+        <td>Optimises for visibility and points, not output. Office politics</td>
+        <td><span class="tag t-flat">Checklist</span> <strong>Fix the points table first</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Fiza</strong><br><span style="font-size:12px;color:var(--ink-3)">Graphic designer</span></td>
+        <td>Design work as assigned — <strong>significantly underused</strong></td>
+        <td class="num"><span class="tag t-good">High</span></td>
+        <td class="num"><span class="tag t-warn">Medium</span></td>
+        <td>Does what is asked, competently. Already on the payroll and in the room</td>
+        <td>Has no brief format and no calendar, so work reaches her late or not at all</td>
+        <td><span class="tag t-flat">Checklist</span> <strong>Absorbs 100% of creative</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call">
+    <div class="ct">The two-track rule</div>
+    <p><strong>Mumtaz and Chesha get outcomes:</strong> "This line is yours. The number is X. Come to me when you need a decision." They will resent step-by-step instruction and it wastes their capability.</p>
+    <p><strong>Archana, Shagufta, Sakina, Jayshree get checklists:</strong> one task, one deadline, one definition of done, written down. Handing them an outcome and expecting them to decompose it — which is what "delegate results, not steps" would tell you to do — will fail, and it will look like their failure when it was a design error.</p>
+    <p>This is the single most important adjustment in this whole document. Five of your seven people cannot receive a delegated outcome today. That is not a permanent condition — §16 is how it changes — but it is today's reality and the system must match it.</p>
+  </div>
+
+  <h3 style="color:var(--crit)">Handling Mumtaz — the part that decides whether any of this survives</h3>
+  <p>She has more tenure, a longer trust line to Stan sir, and by your reading, some resentment about your arrival. She also runs, competently, the ₹7.4 Cr that is currently carrying the company. Both things are true at once, and the second is why the first must be solved rather than tolerated.</p>
+  <p>Do not compete with her for Stan sir's attention — that is a contest you lose on tenure alone. Sponsor her instead:</p>
+  <ul>
+    <li><strong>Give her the formal scope she already wants.</strong> She wants everything to visibly sit under her. In CCNG it already does. Name it — "CCNG Business Head" or equivalent — and say it in front of Stan sir. It costs you nothing and removes the thing she is anxious about.</li>
+    <li><strong>Route her wins upward yourself.</strong> When CCNG delivers, you report it as her result, by name, in writing, to Stan sir. Do this before she has to. A person who is being publicly credited by you has far less to gain from going around you.</li>
+    <li><strong>Do not give her people to lead.</strong> You said she flares at juniors and cannot lead. Sakina works with her on F-Cell — keep that functional, not managerial. Expanding her people-scope would fail and damage her standing.</li>
+    <li><strong>Never let a disagreement with her reach Stan sir as a surprise.</strong> If you and she differ, tell him first, neutrally, and include her position fairly. The backchannel only works when the front channel is empty.</li>
+  </ul>
+
+  <h3>Handling Chesha — your biggest capability, on your deadest line</h3>
+  <p>SGO has produced zero for two months and she owns it. Her self-image is that she is the best performer in the room; the data currently says otherwise, and she may well know it, which would explain the mood you have noticed.</p>
+  <p>Do not open with the zero. Open with scope and a number, because that is what her ego attaches to and it is also what the business needs:</p>
+  <ul>
+    <li>Give her Student Genomics as a <strong>named business unit</strong> with a public monthly target (80 kits at the 85% rung) and the authority to run parent webinars through CBOs without asking.</li>
+    <li>Make the number visible weekly. Ego attached to a public number becomes useful; ego attached to perception becomes politics.</li>
+    <li>In the first conversation, ask her to diagnose the stoppage rather than defend it: <em>"July and August were zero. You know this line better than anyone — tell me what actually broke."</em> That is a question she can answer without losing face, and you genuinely need the answer.</li>
+  </ul>
+</section>
+
+<section id="s14">
+  <h2><span class="n">14</span>Delegation Scripts</h2>
+  <p class="lede">In the language you actually manage in. The pattern is always the same: <strong>outcome, deadline, autonomy boundary, reporting point.</strong></p>
+
+  <div class="script">
+    <div class="lbl">1 · Complete delegation (D1) — for Sakina, Archana, Fiza</div>
+    <div class="say bad">"Ye kaam kar sakti ho? Dekh lena zara."</div>
+    <div class="say">"आज से ये काम पूरी तरह आपका है। <strong>Outcome:</strong> हर webinar का link 24 घंटे पहले live होना चाहिए, 3 reminders जाने चाहिए, और attendance sheet session खत्म होने के 2 घंटे के अंदर group में आनी चाहिए। <strong>Deadline:</strong> हर event पर, हर बार। <strong>मुझसे पूछने की ज़रूरत नहीं</strong> — ये आपका decision है। मुझे सिर्फ़ तब बताइए अगर live session में technical failure हो जाए। <strong>Report:</strong> हर Friday 3:30 को एक line — कितने events, कितनी attendance।"</div>
+    <div class="hi">Note what is missing: no "please", no "if possible", no "let me know if you can't". Ownership transfers cleanly or not at all.</div>
+  </div>
+
+  <div class="script">
+    <div class="lbl">2 · Delegation with review (D2) — for Shagufta, Chesha</div>
+    <div class="say">"Student Genomics अब पूरी तरह आपकी unit है। <strong>Number:</strong> November तक 80 kits per month। <strong>आपके पास authority है</strong> — CBOs के through parent webinars आप खुद schedule कर सकती हैं, मुझसे पूछे बिना। <strong>हर Monday 3:00</strong> को हम 20 minute बैठेंगे — आप बताएँगी कहाँ पहुँचा, मैं सिर्फ़ decisions दूँगा। <strong>बीच में मुझे तब बुलाइए</strong> जब कोई school pricing पूछे या कोई महीना target के 50% से नीचे जा रहा हो।"</div>
+  </div>
+
+  <div class="script">
+    <div class="lbl">3 · Delegation needing your final approval (D3) — for Fiza on creatives</div>
+    <div class="say">"Creatives अब आपका काम है, मेरा नहीं। हर महीने की 25 तारीख को आपको पूरा content calendar मिलेगा। <strong>आप बनाएँगी, मैं सिर्फ़ final approve करूँगा</strong> — और approval सिर्फ़ एक बार, मेरी 3:30 वाली window में। <strong>ज़रूरत की तारीख़ से 3 दिन पहले</strong> मुझे draft चाहिए। अगर 3 दिन पहले नहीं आया, तो वो post उस दिन नहीं जाएगी — हम next cycle में डालेंगे। मैं दोबारा design नहीं करूँगा।"</div>
+    <div class="hi">The last two sentences are the important ones. Without a stated consequence, late drafts come back to you at 11 PM and you make the poster yourself. Again.</div>
+  </div>
+
+  <div class="script">
+    <div class="lbl">4 · Recurring task ownership — making it permanent, not a one-off favour</div>
+    <div class="say">"मैं ये आपको एक बार के लिए नहीं दे रहा हूँ। <strong>ये अब permanently आपकी responsibility है</strong> — हर हफ़्ते, बिना मेरे बोले। अगर किसी हफ़्ते मैं कुछ नहीं कहता, इसका मतलब ये नहीं कि काम नहीं करना है। इसका मतलब है सब ठीक चल रहा है। <strong>मेरी चुप्पी का मतलब है — चलते रहो।</strong>"</div>
+  </div>
+
+  <div class="script">
+    <div class="lbl">5 · Fixing a delegation that did not land — for Archana, after the missed task</div>
+    <div class="say">"पिछली बार जो मैंने बोला था वो नहीं हुआ, और मुझे लगता है ग़लती मेरी थी — मैंने साफ़ नहीं बोला। <strong>इस बार बिलकुल clear करता हूँ:</strong> काम ये है ___। पूरा होने का मतलब ये है ___। Deadline ये है ___। <strong>अब आप मुझे अपने शब्दों में बताइए</strong> कि आपने क्या समझा, ताकि मुझे पता चले कि हम दोनों एक ही चीज़ सोच रहे हैं।"</div>
+    <div class="hi">"Tell me back in your own words" is the whole technique for the checklist-track people. With Archana specifically — who confuses easily and holds one thing at a time — never skip it.</div>
+  </div>
+
+  <div class="script">
+    <div class="lbl">6 · When someone keeps handing the task back</div>
+    <div class="say">"रुकिए — ये सवाल मेरा नहीं है, आपका है। <strong>आपको क्या लगता है क्या करना चाहिए?</strong>" <br><br>"ठीक है, वही कीजिए। अगर ग़लत हो गया तो हम साथ में ठीक कर लेंगे — लेकिन decision आपका रहेगा।"</div>
+    <div class="hi">Say this every time, without exception, for two weeks. Any single rescue resets the habit completely. The discomfort of not answering is the entire cost of the fix.</div>
+  </div>
+
+  <div class="script">
+    <div class="lbl">7 · The scope-and-credit conversation with Mumtaz</div>
+    <div class="say">"मुमताज़, CCNG पूरी तरह आपका business है — Gold, Diamond, UPG, सब। मैं उसमें रोज़ नहीं आऊँगा। <strong>मैं चाहता हूँ कि company में सब जानें कि ये आपका line है</strong>, इसलिए हर महीने CCNG के numbers मैं Stan sir को आपके नाम से भेजूँगा। <strong>मुझे आपसे एक चीज़ चाहिए:</strong> महीने का एक dashboard, और कोई problem होने पर मुझे पहले पता चले — बाद में नहीं।"</div>
+    <div class="hi">The last line is the actual objective. You are trading public credit — which costs you nothing — for early information, which is what protects you.</div>
+  </div>
+</section>
+
+<section id="s15">
+  <h2><span class="n">15</span>Escalation Matrix</h2>
+  <p class="lede">Print this. Put it in the team WhatsApp group. It is the rule that makes your communication windows survivable.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Situation</th><th class="num">Level</th><th>What the team does</th><th>What reaches you, and when</th></tr></thead>
+    <tbody>
+      <tr><td>Routine customer question about kit, report or process</td><td class="num"><span class="tag t-good">Green</span></td><td>Answers from the SOP</td><td>Nothing</td></tr>
+      <tr><td>Customer unhappy but the issue is resolvable</td><td class="num"><span class="tag t-good">Green</span></td><td>Resolves, logs it</td><td>Weekly summary count only</td></tr>
+      <tr><td>Customer threatening a public review or social post</td><td class="num"><span class="tag t-crit">Red</span></td><td>Acknowledges, does not argue, escalates immediately</td><td><strong>Call you now</strong></td></tr>
+      <tr><td>Discount requested within the published price list</td><td class="num"><span class="tag t-good">Green</span></td><td>Applies it</td><td>Nothing</td></tr>
+      <tr><td>Discount requested beyond the list, deal under ₹2 L</td><td class="num"><span class="tag t-warn">Amber</span></td><td>Holds, prepares a recommendation</td><td>Next Office Hours, 15:30</td></tr>
+      <tr><td>Any deal over ₹2 L, or a pricing precedent</td><td class="num"><span class="tag t-crit">Red</span></td><td>Does not commit anything</td><td><strong>Call you now</strong></td></tr>
+      <tr><td>CBO asks a routine stock, kit or process question</td><td class="num"><span class="tag t-good">Green</span></td><td>Shagufta or Archana handles</td><td>Nothing</td></tr>
+      <tr><td>CBO unhappy, considering going inactive</td><td class="num"><span class="tag t-warn">Amber</span></td><td>Keeps engaging, informs you same day</td><td>Same-day message; you decide whether to call</td></tr>
+      <tr><td>A Founding-10 CBO threatens to exit or return stock</td><td class="num"><span class="tag t-crit">Red</span></td><td>Does not negotiate</td><td><strong>Call you now</strong></td></tr>
+      <tr><td>Conflict between two CBOs, or over territory</td><td class="num"><span class="tag t-crit">Red</span></td><td>Takes no side, gathers facts</td><td><strong>Call you now</strong></td></tr>
+      <tr><td>School asks for a brochure or general information</td><td class="num"><span class="tag t-good">Green</span></td><td>Sends the standard pack</td><td>Nothing</td></tr>
+      <tr><td>School asks for pricing, an MOU or a custom model</td><td class="num"><span class="tag t-crit">Red</span></td><td>Books it into your Thursday slot</td><td>Same day — this is a VP conversation</td></tr>
+      <tr><td>Payment delayed under 7 days</td><td class="num"><span class="tag t-good">Green</span></td><td>Follows up on the standard script</td><td>Nothing</td></tr>
+      <tr><td>Payment delayed over 15 days, or a refund demanded</td><td class="num"><span class="tag t-warn">Amber</span></td><td>Escalates with full history attached</td><td>Next Office Hours</td></tr>
+      <tr><td>Lab, dispatch or logistics failure blocking samples</td><td class="num"><span class="tag t-crit">Red</span></td><td>Starts the workaround immediately</td><td><strong>Call you now</strong></td></tr>
+      <tr><td>Daily report late</td><td class="num"><span class="tag t-good">Green</span></td><td>Sends it late, notes the reason</td><td>Nothing — unless twice in a week</td></tr>
+      <tr><td>A report has been wrong twice in a week</td><td class="num"><span class="tag t-warn">Amber</span></td><td>Flags it themselves</td><td>Next Office Hours</td></tr>
+      <tr><td>Anything involving Stan sir, or a major partner</td><td class="num"><span class="tag t-crit">Red</span></td><td>Informs you before responding</td><td><strong>Call you now</strong></td></tr>
+      <tr><td>Anything legal, medical or safety-related</td><td class="num"><span class="tag t-crit">Red</span></td><td>Stops and escalates</td><td><strong>Call you now</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>The no-boomerang rule</h3>
+  <p>Nobody brings you a problem alone. Anything raised in Office Hours arrives in this shape, and if it does not, you send it back — politely, but every time:</p>
+  <div class="script">
+    <div class="lbl">The four-line format — put it in the group as a template</div>
+    <div class="say"><strong>Problem:</strong> क्या हुआ, एक line में।<br><strong>मैंने क्या check किया:</strong> मैंने ये-ये देखा / इनसे बात की।<br><strong>दो possible solutions:</strong> (1) ___ (2) ___<br><strong>मेरी recommendation:</strong> मुझे लगता है (1) करना चाहिए, क्योंकि ___।</div>
+    <div class="hi">Your job then shrinks to one word — "haan" or "nahin" — which takes ten seconds instead of ten minutes. For Archana and Sakina, who both tend to bring raw problems, expect to send the first several back. That is the training working, not failing.</div>
+  </div>
+
+  <h3>The 30-second distraction firewall</h3>
+  <p>When anything new arrives, decide inside 30 seconds. Never "I'll look at it later" — that is how your day gets eaten:</p>
+  <div class="grid2">
+    <div class="card"><h4>DO</h4><p>Only if it is genuinely VP-level <em>and</em> genuinely today. Both, not either.</p></div>
+    <div class="card"><h4>DELEGATE</h4><p>Assign it now, with the outcome and deadline stated. Not "later".</p></div>
+    <div class="card"><h4>SCHEDULE</h4><p>Into the correct themed block. If no block fits, it is probably not yours.</p></div>
+    <div class="card"><h4>DASHBOARD</h4><p>If it is information rather than a decision, it belongs on the one-pager.</p></div>
+    <div class="card"><h4>DEFER</h4><p>If the decision can wait, it goes to Office Hours. Most can wait.</p></div>
+    <div class="card"><h4>DELETE</h4><p>No value. Say so plainly and move on. This is the most underused option.</p></div>
+  </div>
+</section>
+
+<section id="s16">
+  <h2><span class="n">16</span>The Daily 30-Minute Team Development Block</h2>
+  <p class="lede">15:00–15:30, every day. Not a status meeting — if it becomes one, it has failed. One person, one capability, every day.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Day</th><th>Who</th><th>Focus</th><th>What you actually do</th><th>Capability being built</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Monday</strong></td><td>Chesha</td><td>Student Genomics ownership</td><td>Work the SGO pipeline together. Ask her to decide; you only pressure-test</td><td>Independent business-unit judgement</td></tr>
+      <tr><td><strong>Tuesday</strong></td><td>Shagufta</td><td>Calling &amp; objection handling</td><td>Live roleplay: the dormant-CBO call. You play the reluctant CBO</td><td>Confidence on the hardest call she makes</td></tr>
+      <tr><td><strong>Wednesday</strong></td><td>Archana</td><td>Organisation &amp; prioritisation</td><td>Plan her week <em>with</em> her: three tasks, in order, with times. Then step back</td><td>Sequencing — her single biggest gap</td></tr>
+      <tr><td><strong>Thursday</strong></td><td>Sakina</td><td>Scope &amp; decision confidence</td><td>Give her one small decision to make alone. Back it publicly, even if imperfect</td><td>Acting without permission; less overthinking</td></tr>
+      <tr><td><strong>Friday</strong></td><td>Jayshree</td><td>Output vs activity</td><td>Review her numbers against the <em>new</em> points table. Direct, factual, no lecture</td><td>Redirecting effort to what is now rewarded</td></tr>
+      <tr><td><strong>Saturday</strong><br><span style="font-size:12px;color:var(--ink-3)">60 min</span></td><td>Whole team + Mumtaz 1:1</td><td>Recognition &amp; learning</td><td>30 min: name the week's best work publicly, by name. 30 min: Mumtaz 1:1</td><td>Culture, and Mumtaz's standing</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Fiza joins Wednesday once a month, when the content calendar is set. Mumtaz's slot is deliberately a Saturday 1:1 rather than a weekday coaching block — she is a peer to be aligned with, not a junior to be coached, and treating her as the latter would go badly.</p>
+
+  <div class="call">
+    <div class="ct">The one rule that makes this block work</div>
+    <p>You are not allowed to solve anything in these 30 minutes. The moment you give the answer, you have run a status meeting and built nothing. Ask, wait through the silence, let them decide, and back the decision even when yours would have been slightly better. <strong>Slightly worse decisions made independently are worth far more to you than good decisions made by you</strong> — because only the first kind scales past 37 hours.</p>
+  </div>
+</section>
+<div class="partrule">
+  <div class="pn">Part IV</div>
+  <h2>Growth Engines</h2>
+  <p>Three systems, built on the actual roster in your workbook — 106 CBOs, 666 associates, and the 1,196 kits already sitting in the field.</p>
+</div>
+
+<section id="s18">
+  <h2><span class="n">18</span>CBO Activation System</h2>
+  <p class="lede">This is your highest-return system. Not because CBOs are new, but because 93 of them have already paid for stock they are not selling.</p>
+
+  <div class="statrow" style="margin-bottom:26px">
+    <div class="stat"><div class="k">CBOs on roster</div><div class="v">106</div><div class="s">All ranked CBO</div></div>
+    <div class="stat"><div class="k">Holding advance stock</div><div class="v">93</div><div class="s">1,196 kits total</div></div>
+    <div class="stat"><div class="k">Meaningfully active</div><div class="v hot">~21</div><div class="s">Your own estimate</div></div>
+    <div class="stat"><div class="k">Stocked but dormant</div><div class="v hot">72</div><div class="s">≈900 kits idle</div></div>
+    <div class="stat"><div class="k">Recruiting associates</div><div class="v hot">20</div><div class="s">86 recruit nobody</div></div>
+  </div>
+
+  <h3>Segmentation — by stock held, not by enthusiasm</h3>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Segment</th><th class="num">Count</th><th class="num">Stock held</th><th>Owner</th><th>Cadence</th><th>Target</th><th>Your involvement</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Tier 1 · Founding 10</strong><br><span style="font-size:12px;color:var(--ink-3)">The 10 largest stock-holders — 250 kits, 21% of all stock</span></td><td class="num">10</td><td class="num">250</td><td>VP</td><td>Fortnightly 1:1, 15 min</td><td class="num">10 kits/mo each<br><span style="font-size:11px">= 100/mo</span></td><td><span class="tag t-crit">Personal, always</span></td></tr>
+      <tr><td><strong>Tier 2 · High potential</strong><br><span style="font-size:12px;color:var(--ink-3)">Next 15 by stock — together with Tier 1, 44% of all stock</span></td><td class="num">15</td><td class="num">272</td><td>VP + Shagufta</td><td>Monthly VP call, fortnightly Shagufta</td><td class="num">4 kits/mo each<br><span style="font-size:11px">= 60/mo</span></td><td>Monthly call</td></tr>
+      <tr><td><strong>Tier 3 · Stocked dormant</strong><br><span style="font-size:12px;color:var(--ink-3)">Have paid for kits, are not moving them — <strong>the real prize</strong></span></td><td class="num">~55</td><td class="num">~560</td><td>Shagufta</td><td>Fortnightly call, logged</td><td class="num">2 kits/mo each<br><span style="font-size:11px">= 110/mo</span></td><td>Exception only</td></tr>
+      <tr><td><strong>Tier 4 · Paper CBOs</strong><br><span style="font-size:12px;color:var(--ink-3)">13 hold zero stock; 11 have no purchase date at all</span></td><td class="num">~24</td><td class="num">~110</td><td>Archana</td><td>Quarterly broadcast</td><td class="num">Convert or retire</td><td><span class="tag t-flat">None</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Tier 1 + 2 + 3 at these modest per-CBO rates produce <strong>270 kits/month</strong> — against the 292/month the 100% rung needs, and comfortably past the 150 the 85% rung needs. Note how unambitious the per-person numbers are: Tier 3 is asking two kits a month from someone already holding ten.</p>
+
+  <div class="call">
+    <div class="ct">The number that unlocks every dormant-CBO conversation</div>
+    <p>Your own price sheet: a CBO buys at <strong>₹18,000</strong> and the client price is <strong>₹39,000</strong>. Gross incentive <strong>₹21,000</strong>, net of 2% TDS <strong>₹17,441 per kit.</strong></p>
+    <p>A dormant CBO holding 10 kits is sitting on <strong>₹1.74 lakh of unearned income.</strong> A Founding-10 CBO doing 10 kits a month earns <strong>₹1.74 lakh a month.</strong> Most of your 72 dormant CBOs have almost certainly never had this arithmetic said to them plainly, in one sentence, by a VP.</p>
+    <p>That sentence is your activation campaign. It is not a motivational message — it is their own money, already committed, sitting in a box.</p>
+  </div>
+
+  <h3>The daily 5-CBO call — 12:45 to 13:30, every day</h3>
+  <p>Your workbook already has a "5 CBOs" column against every working day. It has never been executed as designed. Five a day, six days a week, is <strong>120 CBO conversations a month</strong> — the entire roster covered comfortably, with the Founding 10 reached fortnightly.</p>
+  <p>Every call ends with two things, and the call is not finished without them: <strong>a number and a date.</strong> "Kitne kits is mahine?" and "Kis tareekh tak?" Log both. A call that ends in encouragement rather than a commitment has not happened.</p>
+
+  <div class="script">
+    <div class="lbl">The dormant-CBO call — 4 minutes, not 20</div>
+    <div class="say">"नमस्ते ___ जी। आपके पास हमारे <strong>___ kits</strong> already हैं। एक kit पर आपका net incentive <strong>₹17,441</strong> है — यानी आपके पास अभी <strong>₹___ लाख</strong> का business रखा हुआ है, बस चला नहीं है।<br><br>मैं आपसे एक चीज़ पूछना चाहता हूँ: <strong>अटक कहाँ रहा है?</strong> Leads नहीं मिल रहे, या pitch में दिक्कत आ रही है, या time नहीं मिल रहा?<br><br>[सुनिए। यही असली data है।]<br><br>ठीक है। तो <strong>इस महीने कितने kits?</strong> ... और <strong>किस तारीख़ तक?</strong> मैं वो तारीख़ note कर रहा हूँ और उस दिन खुद call करूँगा।"</div>
+    <div class="hi">The middle question is the one that matters. Seventy-two identical answers will tell you exactly what is broken across the network — and that is a diagnosis you cannot buy anywhere else.</div>
+  </div>
+
+  <h3>Geography — where your two field days go</h3>
+  <p><strong>Maharashtra holds 220 of your 772 network members — 28%</strong> — and 27 of 106 CBOs, many in Mumbai City and suburban. Then Gujarat (95), Karnataka (65), UP (53), Delhi (40), Telangana (39).</p>
+  <p>So your field days are not a travel question. A Mumbai-based physical CBO meet reaches a quarter of your network at commuting distance. Run one monthly, in person, and let the other states stay on video.</p>
+</section>
+
+<section id="s17">
+  <h2><span class="n">17</span>Associate Activation System</h2>
+  <p class="lede">666 associates, all already in the WhatsApp community. You will not call them, and you should not try.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Segment</th><th class="num">Approx</th><th>Who they are</th><th>Owner</th><th>Cadence</th><th>Your involvement</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Champions</strong> — producing now</td><td class="num"><span class="dr">DATA REQ</span></td><td>Selling consistently without prompting</td><td>VP + Shagufta</td><td>Monthly recognition, named publicly</td><td><span class="tag t-crit">Personal — these become CBOs</span></td></tr>
+      <tr><td><strong>Fresh &amp; winnable</strong></td><td class="num">258</td><td>Batches B19 &amp; B20 — newest, most motivated, least worked</td><td>Shagufta</td><td>ATP within 30 days, then fortnightly</td><td>Speak at ATP only</td></tr>
+      <tr><td><strong>Dormant with history</strong></td><td class="num">~225</td><td>Batches B15–B18 — trained, went quiet</td><td>Jayshree</td><td>Reactivation campaign, monthly</td><td><span class="tag t-flat">None</span></td></tr>
+      <tr><td><strong>Cold / untrained</strong></td><td class="num">~130</td><td>B10 and earlier, HCP, unbatched</td><td>Archana</td><td>Community broadcast only</td><td><span class="tag t-flat">None</span></td></tr>
+      <tr><td><strong>CBO-recruited</strong></td><td class="num">44</td><td>Brought in by 20 CBOs — <strong>managed by their CBO, not by you</strong></td><td>Their CBO</td><td>Via the CBO</td><td><span class="tag t-flat">None — this is the model</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Champion count is <span class="dr">DATA REQUIRED</span> — your workbook has no per-associate sales column, only the CBO stock ledger. Adding one field to the roster ("kits sold this month") converts this whole table from estimate to fact, and it is a one-hour job for Archana.</p>
+
+  <h3>The multiplier principle — where your leverage actually is</h3>
+  <div class="call">
+    <div class="ct">Only 20 of 106 CBOs have ever recruited an associate</div>
+    <p>Those 20 have brought in 44 people between them. <strong>Eighty-six CBOs have recruited nobody.</strong> That is the leadership-leverage model sitting switched off.</p>
+    <p>You cannot manage 666 associates and you should stop imagining you might. But you can get <strong>20 more CBOs recruiting 3 associates each — 60 new associates who are trained, chased and managed by their CBO rather than by your team.</strong> That is the difference between chasing 100 people and influencing 10 who chase them for you.</p>
+    <p>Make recruitment count in the CBO leaderboard. A CBO who recruits three producing associates is worth more to you than one who personally sells five kits, because the first compounds and the second does not.</p>
+  </div>
+
+  <h3>The points-system rewrite — do this in week 1</h3>
+  <p>Today F-Sale carries the highest points, so your team optimises away from ASO/CBO — the ₹4.99 Cr line. The fix is to make points follow plan revenue:</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Activity</th><th class="num">Points now</th><th class="num">Points from Sep</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>F-Sale (direct)</td><td class="num">Highest</td><td class="num">Medium</td><td>Real, but does not compound and is not the gap</td></tr>
+      <tr><td>Dormant CBO reactivated (first kit in 60 days)</td><td class="num">—</td><td class="num"><strong>Highest</strong></td><td>Directly attacks the 72-CBO bottleneck</td></tr>
+      <tr><td>Associate recruited by a CBO</td><td class="num">—</td><td class="num"><strong>Highest</strong></td><td>The multiplier — builds next year's capacity</td></tr>
+      <tr><td>Student Genomics kit</td><td class="num">Low</td><td class="num"><strong>High</strong></td><td>₹2.03 Cr line currently at zero</td></tr>
+      <tr><td>ASO/CBO kit</td><td class="num">Low</td><td class="num">High</td><td>Largest revenue line in the plan</td></tr>
+      <tr><td>CCN course sale</td><td class="num">Counted as a kit</td><td class="num">Separate, low</td><td>₹2,000 product — must stop inflating the kit count</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Announce it once, in the Saturday meeting, with the reason stated plainly: "points ab wahan hain jahan company ka paisa hai." Jayshree will follow the points — she already does. That is not a character flaw to manage; it is a control surface to use.</p>
+</section>
+
+<section id="s19">
+  <h2><span class="n">19</span>Student Genomics — Protected Execution System</h2>
+  <p class="lede">₹2.03 Cr of plan. 26 kits booked. Zero in July, zero in August. This section assumes the line is broken, not slow — because two consecutive zeroes mean exactly that.</p>
+
+  <div class="call danger">
+    <div class="ct">Week 1, before any planning: find out which of three things is true</div>
+    <p><strong>(a) No owner is actually driving it</strong> — Chesha has SGO on paper but her week is filled with CCNG support work. <strong>(b) No lead source exists</strong> — nobody is generating parent or school conversations at all. <strong>(c) The offer does not convert</strong> — conversations happen and die at price or relevance.</p>
+    <p>These have completely different fixes and you cannot tell them apart from the outside. One 45-minute conversation with Chesha, plus five calls to CBOs who have sold an SGO kit before, will settle it. <strong>Do not build a plan before you know which one it is</strong> — that is how the last plan produced 26 kits.</p>
+  </div>
+
+  <h3>The arithmetic of 80 kits a month</h3>
+  <p>Two channels, and your own KRA sheet already names both:</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>Channel 1 · CBO-run parent webinars</h4>
+      <p><strong>16 CBOs × 1 parent webinar/month × 5 conversions = 80 kits.</strong></p>
+      <p>You already have 21 active CBOs and 106 on the roster. This needs sixteen of them running one webinar a month — with your deck, your script, your speaker support. The CBO earns on every kit; the pitch to them is the same ₹17,441.</p>
+      <p><strong>This is the fastest route and it needs no new relationships.</strong></p>
+    </div>
+    <div class="card">
+      <h4>Channel 2 · School partnerships</h4>
+      <p><strong>20 signed schools × ~300 students × 5% = 300 kits over the period.</strong></p>
+      <p>Needs ~3 MOUs a month from September. Slower to start, far more durable, and the reason it deserves your Thursday.</p>
+      <p>Shagufta books the principal meetings; you walk in and close. That split matches both your strengths.</p>
+    </div>
+  </div>
+  <p class="tnote">Note the price inconsistency to resolve in week 1: your KRA sheet says the student kit is <strong>₹31,000</strong>, your PRICE sheet says MRP <strong>₹27,000</strong> (associate ₹22,950, CBO ₹17,500). The team cannot sell confidently against two numbers. Pick one and publish it.</p>
+
+  <h3>Protected time — non-negotiable</h3>
+  <ul>
+    <li><strong>Monday 10:45–13:00</strong> — SGO deep block. Pipeline, proposals, partner models, webinar design.</li>
+    <li><strong>Monday 15:00–15:30</strong> — Chesha coaching slot, SGO-focused.</li>
+    <li><strong>Monday 20:00</strong> — SG hosting. Every attendee leaves with a named next step.</li>
+    <li><strong>Thursday 11:00–16:00</strong> — school and institution meetings.</li>
+    <li><strong>Saturday review</strong> — SGO is agenda item two, before CCNG, every week.</li>
+  </ul>
+  <p>That is roughly <strong>7 hours a week — 18% of your capacity</strong> — on a line producing nothing today. That allocation is not generous; it is proportionate to ₹2.03 Cr.</p>
+
+  <div class="call warn">
+    <div class="ct">An honest word about the 1,200 target</div>
+    <p>1,174 kits in 7 months is 168/month from a standing start of zero. I am not going to tell you that is likely, because it is not. A credible aggressive ramp — 25 / 50 / 90 / 130 / 170 / 200 / 230 — reaches about <strong>1,020, or 85% of target.</strong> A realistic one lands nearer 700.</p>
+    <p>This is not a reason to lower the target. It is a reason to <strong>protect the 85% revenue rung elsewhere</strong>: at 80 SGO kits/month you are at ₹12.75 Cr and ₹8.44 lakh of incentive. SGO reaching 80 is the commitment. SGO reaching 168 is the stretch. Plan for the first and chase the second.</p>
+  </div>
+</section>
+
+<section id="s20">
+  <h2><span class="n">20</span>Partnership &amp; New Business System</h2>
+  <p class="lede">Thursday, and 9% of your week. Deliberately modest — partnerships pay off next year, and this year has seven months in it.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Channel</th><th>Target this period</th><th>Owner</th><th>First step</th><th>Why it earns time</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Schools</strong> (SGO)</td><td>20 MOUs by January, 3/month</td><td>VP closes, Shagufta books</td><td>List 40 Mumbai schools by 10 Sep; Shagufta calls; you meet 3/week</td><td>The structural fix under a ₹2.03 Cr line</td></tr>
+      <tr><td><strong>Wellness companies</strong> (CCN)</td><td>3 tie-ups</td><td>VP, with Stan sir for close</td><td>CCN as staff upskilling in their existing combo offers</td><td>B2B distribution — one deal, many units</td></tr>
+      <tr><td><strong>Corporates</strong></td><td>2 pilots</td><td>VP</td><td>HR/CSR pitch: corporate wellness + on-site DNA camps</td><td>Bulk seats, recurring, high per-deal value</td></tr>
+      <tr><td><strong>Nutritionist-in-school</strong></td><td>1 pilot</td><td>Chesha</td><td>Run in one signed school before selling it anywhere else</td><td>If it works it becomes the school pitch itself</td></tr>
+      <tr><td>Expos &amp; events</td><td>Only where leads convert</td><td>Chesha</td><td>Measure last event's lead → sample rate before booking another</td><td><span class="tag t-warn">Currently unmeasured</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="call">
+    <div class="ct">The chain, enforced</div>
+    <p><strong>Activity → lead → qualification → follow-up → conversion → DNA sample → revenue.</strong> Every event and webinar is reported at the <em>sample</em> end of that chain, never the activity end. "We did four webinars" is not a report. "Four webinars, 180 leads, 22 samples, ₹3.9 lakh" is a report.</p>
+    <p>Any activity that cannot be traced to samples within 60 days stops being funded. That single rule will free more of your time than any calendar change in this document.</p>
+  </div>
+</section>
+<div class="partrule">
+  <div class="pn">Part V</div>
+  <h2>Measurement</h2>
+  <p>Enough to know the state of the business in fifteen minutes, and no more than that.</p>
+</div>
+
+<section id="s21">
+  <h2><span class="n">21</span>The One-Page VP Dashboard</h2>
+  <p class="lede">Archana fills this by 09:30 daily. You read it at 10:30 in five minutes. You never assemble it.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Block</th><th>Shows</th><th class="num">Frequency</th><th>Red flag</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Revenue</strong></td><td>Month target ₹1.29 Cr · booked · gap · days left · pace</td><td class="num">Daily</td><td>Below pace at day 15</td></tr>
+      <tr><td><strong>DNA samples</strong></td><td>Target · actual · gap — <strong>split: real kits vs CCN course</strong></td><td class="num">Daily</td><td>3 days under 20</td></tr>
+      <tr><td><strong>CBO</strong></td><td>Active count · productive count · kits · <strong>dormant stock remaining</strong></td><td class="num">Daily</td><td>Active count falls</td></tr>
+      <tr><td><strong>Associates</strong></td><td>Active · productive · kits · new recruits by CBOs</td><td class="num">Weekly</td><td>Zero new recruits in a week</td></tr>
+      <tr><td><strong>Student Genomics</strong></td><td>Leads · schools contacted · meetings held · MOUs · kits</td><td class="num">Daily</td><td><strong>Any day at zero</strong></td></tr>
+      <tr><td><strong>Pipeline</strong></td><td>Hot · warm · stuck — with value against each</td><td class="num">Daily</td><td>Stuck value rising 2 weeks running</td></tr>
+      <tr><td><strong>Conversion</strong></td><td>Lead → meeting → sale → sample, as percentages</td><td class="num">Weekly</td><td>Any stage below its 4-week average</td></tr>
+      <tr><td><strong>Top 5 risks</strong></td><td>Named, with an owner against each</td><td class="num">Weekly</td><td>Same risk present 3 weeks</td></tr>
+      <tr><td><strong>Top 5 opportunities</strong></td><td>Named, with a next action</td><td class="num">Weekly</td><td>—</td></tr>
+      <tr><td><strong>Decisions needed from VP</strong></td><td>Maximum 5, each with a recommendation attached</td><td class="num">Daily</td><td>Anything waiting over 48 h</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Build it in Google Sheets this week — not a new tool. Every number here already exists in your workbook or your team's daily reporting; it has simply never been on one page.</p>
+</section>
+
+<section id="s22">
+  <h2><span class="n">22</span>Daily Executive Scorecard</h2>
+  <p class="lede">Seven marks, at 16:45, in under two minutes. Designed to expose the difference between a busy day and a day that moved the business.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th class="num">#</th><th>Indicator</th><th>Counts as a yes when</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><strong>Deep Work block held</strong></td><td>The 90 minutes happened and produced a finished artefact</td></tr>
+      <tr><td class="num">2</td><td><strong>5 CBOs spoken to</strong></td><td>Five calls, each ending with a number and a date</td></tr>
+      <tr><td class="num">3</td><td><strong>Samples moved</strong></td><td>Today's sample count is at or above the daily pace</td></tr>
+      <tr><td class="num">4</td><td><strong>Student Genomics moved</strong></td><td>A school contacted, a webinar booked, or an SGO kit sold</td></tr>
+      <tr><td class="num">5</td><td><strong>A high-value conversation happened</strong></td><td>Partner, principal, Founding-10 CBO, or a deal over ₹2 L</td></tr>
+      <tr><td class="num">6</td><td><strong>Team development done</strong></td><td>The 30-minute block ran and you did not solve it for them</td></tr>
+      <tr><td class="num">7</td><td><strong>Nothing delegated came back</strong></td><td>You did no work that belongs to someone else</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="grid2">
+    <div class="card" style="border-left:3px solid var(--good)"><h4 style="color:var(--good)">6–7 · RESULT DAY</h4><p>The business moved. Four of these a week and the year works.</p></div>
+    <div class="card" style="border-left:3px solid var(--warn)"><h4 style="color:var(--warn)">4–5 · MAINTENANCE DAY</h4><p>Nothing broke, nothing advanced. Acceptable occasionally, not as a pattern.</p></div>
+    <div class="card" style="border-left:3px solid var(--crit)"><h4 style="color:var(--crit)">0–3 · BUSY BUT LOW-VALUE</h4><p>You worked hard and the gap did not move. <strong>Write down what took the day</strong> — after two weeks that list becomes your real stop-doing list.</p></div>
+  </div>
+</section>
+
+<section id="s23">
+  <h2><span class="n">23</span>Weekly Review — Saturday 12:00, 45 minutes</h2>
+  <p class="lede">Ten items, roughly four minutes each. It ends in decisions, not in a summary.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th class="num">#</th><th>Item</th><th>The question that must be answered</th><th class="num">Min</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Revenue</td><td>Are we on ₹1.29 Cr pace? If not, which channel is short and by how much?</td><td class="num">5</td></tr>
+      <tr><td class="num">2</td><td>Samples</td><td>Real kits vs CCN, split. Is the real-kit number moving?</td><td class="num">4</td></tr>
+      <tr><td class="num">3</td><td><strong>CBO</strong></td><td>How many active this week vs last? How much dormant stock cleared?</td><td class="num">6</td></tr>
+      <tr><td class="num">4</td><td>Associates</td><td>How many new recruits came through CBOs, not through us?</td><td class="num">4</td></tr>
+      <tr><td class="num">5</td><td><strong>Student Genomics</strong></td><td>Kits, schools contacted, MOUs. Was any day at zero?</td><td class="num">6</td></tr>
+      <tr><td class="num">6</td><td>Pipeline</td><td>What is stuck, and what is the one thing unblocking it?</td><td class="num">4</td></tr>
+      <tr><td class="num">7</td><td>New business</td><td>Which partnership moved a stage this week?</td><td class="num">3</td></tr>
+      <tr><td class="num">8</td><td>Team</td><td>Who grew? Who is stuck? Who needs a decision made about them?</td><td class="num">4</td></tr>
+      <tr><td class="num">9</td><td>Bottleneck</td><td><strong>What is the single biggest thing slowing sales right now?</strong></td><td class="num">5</td></tr>
+      <tr><td class="num">10</td><td>Next week's Top 3</td><td>One revenue, one growth, one leadership outcome — named</td><td class="num">4</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="call">
+    <div class="ct">The closing rule</div>
+    <p>The review does not end until <strong>three decisions are written down with an owner and a date against each.</strong> A review that produces only information has wasted 45 minutes of a 37-hour week. If nothing needed deciding, the meeting was too long.</p>
+  </div>
+</section>
+
+<section id="s24">
+  <h2><span class="n">24</span>Monthly Strategic Review — first working day, 90 minutes</h2>
+  <p class="lede">Alone for the first 60 minutes. With the team for the last 30.</p>
+  <ol>
+    <li><strong>Where did the revenue actually come from?</strong> By channel, in rupees — not in units.</li>
+    <li><strong>Which channel is genuinely growing</strong>, month on month, three months running?</li>
+    <li><strong>Which channel is consuming effort without producing samples?</strong> Name it and stop funding it.</li>
+    <li><strong>Which CBOs and associates are multipliers?</strong> Who recruited, trained or lifted someone else?</li>
+    <li><strong>What should we stop entirely this month?</strong> One thing minimum, every month.</li>
+    <li><strong>What deserves double the resource?</strong> One thing, and take the resource from item 5.</li>
+    <li><strong>Where exactly is conversion breaking?</strong> Lead → meeting → sale → sample: which stage leaks most?</li>
+    <li><strong>Am I on the right rung?</strong> Check the ladder in §03b. Am I tracking to 85%, 95%, or drifting to 84%?</li>
+    <li><strong>What am I still doing that someone else should own by now?</strong> Answer honestly — this question is the reason the review exists.</li>
+    <li><strong>Is the dormant CBO stock going down?</strong> The single clearest measure of whether this whole system is working.</li>
+  </ol>
+</section>
+
+<div class="partrule">
+  <div class="pn">Part VI</div>
+  <h2>Execution</h2>
+  <p>What happens on Tuesday 1 September, and for the ninety days after it.</p>
+</div>
+
+<section id="s25">
+  <h2><span class="n">25</span>The First 30-Day Sprint — September 2026</h2>
+  <p class="lede">Month theme: <strong>CONTROL.</strong> Get your calendar, your team and your numbers under command before trying to scale anything.</p>
+
+  <div class="scroller">
+  <table>
+    <thead><tr><th style="min-width:96px">Week</th><th>Primary business outcome</th><th>KRA focus</th><th>Delegation goal</th><th>Sales goal</th><th>Team goal</th><th>Stop-doing</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>W1</strong><br><span style="font-size:12px;color:var(--ink-3)">1–6 Sep</span></td>
+        <td><strong>Know exactly why SGO stopped, and rewrite the points table</strong></td>
+        <td>SGO diagnosis · incentives</td>
+        <td>Creatives → Fiza. Dashboard → Archana. Buy 2 AI seats</td>
+        <td>Start the daily 5-CBO calls. 30 CBOs contacted by Saturday</td>
+        <td>Announce comms windows &amp; escalation matrix. Start 30-min block</td>
+        <td>Making any poster yourself</td>
+      </tr>
+      <tr>
+        <td><strong>W2</strong><br><span style="font-size:12px;color:var(--ink-3)">7–13 Sep</span></td>
+        <td><strong>Founding 10 named, briefed and committed to a number</strong></td>
+        <td>CBO reactivation</td>
+        <td>Webinar logistics → Sakina. School calling → Shagufta</td>
+        <td>60 CBOs contacted cumulative. Founding-10 1:1s begun</td>
+        <td>Chesha gets SGO as a named unit with a public number</td>
+        <td>Answering WhatsApp outside windows</td>
+      </tr>
+      <tr>
+        <td><strong>W3</strong><br><span style="font-size:12px;color:var(--ink-3)">14–20 Sep</span><br><span class="tag t-warn">Ganpati</span></td>
+        <td><strong>Hold the line through the break — nothing collapses while you are away</strong></td>
+        <td>Continuity</td>
+        <td><strong>The real test:</strong> does the team run 4 days without you?</td>
+        <td>Batch 22 launch supported. Shagufta continues calling</td>
+        <td>Before leaving: every person knows their week without asking</td>
+        <td>Checking in during the holiday</td>
+      </tr>
+      <tr>
+        <td><strong>W4</strong><br><span style="font-size:12px;color:var(--ink-3)">21–27 Sep</span></td>
+        <td><strong>First school meetings held; SGO produces its first kits since June</strong></td>
+        <td>SGO · schools</td>
+        <td>Community posting fully with Archana, unprompted</td>
+        <td>All 106 CBOs contacted at least once. First school MOU in progress</td>
+        <td>Whole team on the new points table for a full week</td>
+        <td>Solving problems people bring you</td>
+      </tr>
+      <tr>
+        <td><strong>W5</strong><br><span style="font-size:12px;color:var(--ink-3)">28–30 Sep</span></td>
+        <td><strong>Month closed and honestly reviewed against ₹1.29 Cr</strong></td>
+        <td>Review</td>
+        <td>Audit: what came back to you, and why?</td>
+        <td>Close the month. Batch 23 pipeline set</td>
+        <td>First monthly review; October targets set with the team</td>
+        <td>Whatever the scorecard exposed</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call">
+    <div class="ct">Week 3 is the most valuable week of the quarter</div>
+    <p>You are taking three or four days for Ganpati, and that is the first genuine test of everything in this document. If the team runs without you, the delegation is real. If four days away creates a backlog you spend a week clearing, the delegation was cosmetic and you will know precisely where it failed.</p>
+    <p>So do not treat the break as an interruption to the plan. <strong>It is the plan's first audit.</strong> Prepare for it in Week 2 — every person written a one-page "your week without me" — and then genuinely do not check in.</p>
+  </div>
+
+  <h3>The five things that must happen in the first week</h3>
+  <ol>
+    <li><strong>Rewrite the points table</strong> and announce it at the Saturday 5 Sep CBO meeting. Highest single return for the least effort in this document.</li>
+    <li><strong>Buy two AI seats</strong> (~₹4,000/month) for Fiza and Chesha. This ends the poster bottleneck permanently.</li>
+    <li><strong>Diagnose the SGO stoppage</strong> — 45 minutes with Chesha, five calls to CBOs who have sold one.</li>
+    <li><strong>Start the daily 5-CBO calls</strong> on day one. Do not wait for a list to be perfect; start with the 10 largest stock-holders.</li>
+    <li><strong>Announce the communication windows and the escalation matrix</strong> to the whole team, in writing, once.</li>
+  </ol>
+</section>
+
+<section id="s26">
+  <h2><span class="n">26</span>The 90-Day Operating Plan</h2>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Month</th><th>Theme</th><th>Revenue target</th><th>Must be true by month end</th><th>Signal you are winning</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>September</strong></td><td><strong>CONTROL</strong></td><td class="num">₹1.25–1.29 Cr</td>
+        <td>Calendar running to the day-type structure · creatives fully with Fiza · dashboard arriving daily without you asking · points table live · all 106 CBOs contacted once · SGO stoppage diagnosed</td>
+        <td>You spent <strong>zero hours</strong> making posters</td>
+      </tr>
+      <tr>
+        <td><strong>October</strong></td><td><strong>ACTIVATION</strong></td><td class="num">₹1.30–1.40 Cr</td>
+        <td>Founding 10 averaging 6+ kits/month · 40+ active CBOs · SGO at 50+ kits · 3 school MOUs signed · 20 new CBO-recruited associates</td>
+        <td><strong>Dormant stock has visibly fallen</strong></td>
+      </tr>
+      <tr>
+        <td><strong>November</strong></td><td><strong>SCALE</strong></td><td class="num">₹1.45–1.55 Cr</td>
+        <td>Founding 10 at 10 kits/month · 55+ active CBOs · SGO at 80/month · 8 schools signed · CBO-run parent webinars running weekly without you</td>
+        <td>A full week ran well while you were in meetings all week</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">These monthly revenue figures track the 85% rung (₹1.29 Cr average), rising through the quarter. Hitting the top of each range puts you on the 95% path by January. Your company plan asks for ₹1.25 Cr in Sep and Oct, ₹1.50 Cr in Nov — broadly the same shape, which is a good sign: the plan is not the problem, execution against it is.</p>
+</section>
+
+<section id="s27">
+  <h2><span class="n">27</span>Stop-Doing List</h2>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Stop</th><th class="num">Time back</th><th>When</th><th>Goes to</th></tr></thead>
+    <tbody>
+      <tr><td colspan="4" style="background:var(--crit-wash);color:var(--crit);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Stop immediately — this week</td></tr>
+      <tr><td><strong>Making posters and creatives yourself</strong></td><td class="num">~10 h/wk</td><td>Day 1</td><td>Fiza + AI seats + content calendar</td></tr>
+      <tr><td><strong>Continuous WhatsApp through the day</strong></td><td class="num">~6 h/wk</td><td>Day 1</td><td>Three windows</td></tr>
+      <tr><td><strong>Being the first solver of every problem</strong></td><td class="num">~4 h/wk</td><td>Day 1</td><td>The four-line no-boomerang format</td></tr>
+      <tr><td><strong>Late-night reel scrolling</strong></td><td class="num">~7 h/wk</td><td>Day 1</td><td>See §29 — this is the health lever</td></tr>
+      <tr><td colspan="4" style="background:var(--warn-wash);color:var(--warn);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Reduce sharply</td></tr>
+      <tr><td>Meetings without a decision</td><td class="num">~3 h/wk</td><td>Week 1</td><td>Batched into 14:00–15:00, 20-min default</td></tr>
+      <tr><td>Personally chasing tier-3 associates</td><td class="num">~2 h/wk</td><td>Week 1</td><td>Shagufta and Jayshree</td></tr>
+      <tr><td>Re-checking delegated work</td><td class="num">~2 h/wk</td><td>Week 2</td><td>Fixed check-in points only</td></tr>
+      <tr><td colspan="4" style="background:var(--accent-wash);color:var(--accent-ink);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Delegate within 7 days</td></tr>
+      <tr><td>Community posting and reminders</td><td class="num">~3 h/wk</td><td>Week 1</td><td>Archana</td></tr>
+      <tr><td>Data gathering and report building</td><td class="num">~3 h/wk</td><td>Week 1</td><td>Archana — daily dashboard</td></tr>
+      <tr><td>Webinar logistics and attendance</td><td class="num">~2 h/wk</td><td>Week 1</td><td>Sakina</td></tr>
+      <tr><td>Meeting scheduling</td><td class="num">~1 h/wk</td><td>Week 1</td><td>Archana</td></tr>
+      <tr><td colspan="4" style="background:var(--surface-2);color:var(--ink-3);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Systemise within 30 days</td></tr>
+      <tr><td>Creative production end to end</td><td class="num">—</td><td>Month 1</td><td>Monthly calendar + brief template + AI</td></tr>
+      <tr><td>CBO reporting and follow-up</td><td class="num">—</td><td>Month 1</td><td>Shared tracker, fortnightly cadence</td></tr>
+      <tr><td>Associate onboarding</td><td class="num">—</td><td>Month 1</td><td>Standard 30-day track after every batch</td></tr>
+      <tr><td>Weekly reporting to Stan sir</td><td class="num">—</td><td>Month 1</td><td>Auto-generated from the dashboard</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="tnote">Roughly <strong>25 hours a week</strong> currently sits in the first two blocks — against a 37-hour week. Even recovering half of it more than doubles the time you can put on the two lines you own. That, and not any scheduling technique, is where this system gets its return.</p>
+</section>
+<section id="s28">
+  <h2><span class="n">28</span>Automation, AI &amp; Templates</h2>
+  <p class="lede">You said you want the creative work automated or delegated. Here is the full list, ordered by what it gives back.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Today</th><th>Becomes</th><th>How</th><th class="num">Returns</th><th class="num">Cost</th></tr></thead>
+    <tbody>
+      <tr><td><strong>You make every poster</strong></td><td>Fiza makes them from a calendar</td><td>2 AI seats + a monthly content calendar + a one-paragraph brief template</td><td class="num"><strong>~10 h/wk</strong></td><td class="num">₹4,000/mo</td></tr>
+      <tr><td>Reminder creatives made fresh each time</td><td>12 templates, text swapped</td><td>Fiza builds the set once in Canva; Archana edits text only</td><td class="num">~2 h/wk</td><td class="num">One day</td></tr>
+      <tr><td>You compile numbers</td><td>Dashboard arrives at 09:30</td><td>Google Sheet, team enters daily, formulas do the rest</td><td class="num">~3 h/wk</td><td class="num">Free</td></tr>
+      <tr><td>Follow-up messages typed individually</td><td>8 approved scripts</td><td>Write them once with AI, team adapts per contact</td><td class="num">~2 h/wk</td><td class="num">Two hours</td></tr>
+      <tr><td>Weekly report to Stan sir written by hand</td><td>Auto-summary from the dashboard</td><td>Sheet formula plus a fixed narrative template</td><td class="num">~1 h/wk</td><td class="num">Free</td></tr>
+      <tr><td>School proposals written from scratch</td><td>One master deck, name swapped</td><td>Build once with Chesha; she personalises each</td><td class="num">~2 h/mo</td><td class="num">One day</td></tr>
+      <tr><td>Manual reminders for everything</td><td>Scheduled in advance</td><td>WhatsApp scheduling + calendar reminders set monthly</td><td class="num">~1 h/wk</td><td class="num">Free</td></tr>
+      <tr><td>Meeting notes and actions</td><td>Recorded, transcribed, actions extracted</td><td>Phone recorder + AI summary, Archana circulates</td><td class="num">~1 h/wk</td><td class="num">Included</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="call">
+    <div class="ct">Two AI seats cost ₹4,000 a month. Do the comparison honestly.</div>
+    <p>At the 85% rung your incentive is ₹8.44 lakh. Ten hours a week is roughly a quarter of your working time. You are currently spending that quarter on work that scores <strong>8 out of 30</strong> in order to avoid a ₹4,000 monthly cost.</p>
+    <p>That is the most expensive economy in this business, and it is entirely within your authority to end this week.</p>
+  </div>
+  <p><strong>Your role shifts from</strong> copy · paste · chase · coordinate · update <strong>→ to</strong> <span style="color:var(--accent-ink);font-weight:600">decide · coach · connect · create · close</span>. Every row above moves one activity across that line.</p>
+</section>
+
+<section id="s29">
+  <h2><span class="n">29</span>Daily Shutdown — and the part you asked me about directly</h2>
+  <p class="lede">16:45 to 17:00. Fifteen minutes, four steps, then you leave.</p>
+  <ol>
+    <li><strong>Score the day</strong> — the seven marks from §22. Two minutes, honestly.</li>
+    <li><strong>Write tomorrow's Top 3</strong> — one revenue, one growth, one leadership outcome. On paper, not in your head.</li>
+    <li><strong>Clear the capture list</strong> — everything caught during the day gets delegated, scheduled or deleted. Nothing carries over unassigned.</li>
+    <li><strong>Close the laptop and say the day is finished.</strong> Out loud if it helps. This is the step that does the work.</li>
+  </ol>
+
+  <div class="call">
+    <div class="ct">On the reels, the overload, and the health — since you asked</div>
+    <p>You said you get home still overloaded, lose the evening to scrolling, that your health is slipping and you cannot see how to change it. I am not going to give you a fitness plan; that is not what is broken here.</p>
+    <p><strong>The scrolling is not a discipline problem. It is a closure problem.</strong> A day that never formally ends stays open in your head, and an open day cannot be rested from — so the mind reaches for the cheapest available off-switch, which is an infinite feed. This is why the shutdown routine is in this document at all: <em>step 4 is the health intervention.</em> A day that has been explicitly closed does not need to be numbed shut.</p>
+    <p>Then two mechanisms, and only two, because you do not have room for more:</p>
+    <ul>
+      <li><strong>Walk your CBO calls.</strong> The 12:45–13:30 block is 45 minutes of talking on the phone, six days a week. It does not require a chair. That is <strong>four and a half hours of walking a week</strong> that costs you no additional time at all, on a block you are already committed to. This is the single realistic change available inside a 37-hour week with 8 PM commitments — and it is why "walk while calling" is written into the ideal day.</li>
+      <li><strong>Park the phone at 22:30, outside the bedroom.</strong> Not "use it less" — a location rule, not a willpower rule. Willpower rules fail against feeds designed by people whose job is to defeat them.</li>
+    </ul>
+    <p>One more thing worth saying plainly. You are carrying ₹11.3 crore, seven months, and a team where five of seven people need everything spelled out. Feeling overloaded in that position is not a personal failing and it is not something a better schedule fixes on its own. What fixes it is the thing this whole document is for: <strong>fewer things being genuinely yours.</strong> The health follows the load coming down. It very rarely goes the other way round.</p>
+  </div>
+</section>
+
+<section id="s30" style="border-bottom:0">
+  <h2><span class="n">30</span>Ten Rules of Operation</h2>
+  <p class="lede">Print these. They are the compressed version of everything above.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th class="num">#</th><th>Rule</th><th>What it protects you from</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><strong>The first 90 minutes belong to strategy, not to other people's messages.</strong></td><td>A day that gets claimed before you have used it</td></tr>
+      <tr><td class="num">2</td><td><strong>Five CBOs every day. Each call ends with a number and a date.</strong></td><td>The 900 idle kits staying idle</td></tr>
+      <tr><td class="num">3</td><td><strong>WhatsApp lives in three windows. Urgent means a phone call.</strong></td><td>Role pollution — your stated core problem</td></tr>
+      <tr><td class="num">4</td><td><strong>Nobody brings a problem without two options and a recommendation.</strong></td><td>Being the company's first line of problem-solving</td></tr>
+      <tr><td class="num">5</td><td><strong>If it is not authority, judgement or relationship — delegate it. "Faster if I do it" is not a reason.</strong></td><td>Becoming the poster factory again</td></tr>
+      <tr><td class="num">6</td><td><strong>Thirty minutes of team development daily. Never cancelled, never a status update.</strong></td><td>A permanent 37-hour ceiling</td></tr>
+      <tr><td class="num">7</td><td><strong>Every meeting ends with a decision, an owner and a date — or it should have been a message.</strong></td><td>Meetings expanding to fill the week</td></tr>
+      <tr><td class="num">8</td><td><strong>Student Genomics gets protected time every week, whatever else is burning.</strong></td><td>A ₹2.03 Cr line staying at zero</td></tr>
+      <tr><td class="num">9</td><td><strong>Leave at 17:00. Close the day properly first.</strong></td><td>The evening dissolving into a feed</td></tr>
+      <tr><td class="num">10</td><td><strong>Ask weekly: what am I still doing that someone else should own?</strong></td><td>Quietly taking everything back</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call">
+    <div class="ct">The success test</div>
+    <p>At the end of a normal week you should be able to answer yes to: did revenue move · did samples move · did more CBOs become productive · did more associates become productive · did Student Genomics move · did a partnership move · did I develop someone · did I spend most of my time on VP-level work.</p>
+    <p>If you were very busy and these did not move, <strong>the schedule failed and should be changed</strong> — not endured. This document is a hypothesis about where your hours are worth most. Test it for four weeks against the scorecard, then edit it with what you learn.</p>
+  </div>
+
+  <h3>Still outstanding — five things I could not compute</h3>
+  <ul>
+    <li><span class="dr">DATA REQUIRED</span> <strong>Per-associate sales.</strong> Your roster has no "kits sold" column, so Champion and active-associate counts are estimates. One hour of Archana's time fixes this permanently.</li>
+    <li><span class="dr">DATA REQUIRED</span> <strong>Qualified leads and lead → sample conversion.</strong> Nothing in the workbook tracks the funnel end to end, so the biggest leak cannot be located.</li>
+    <li><span class="dr">DATA REQUIRED</span> <strong>Current school partnership count.</strong> Assumed near zero given SGO's 26 kits — confirm.</li>
+    <li><span class="dr">CONFLICT</span> <strong>Student kit price:</strong> ₹31,000 in your KRA sheet, ₹27,000 MRP in your PRICE sheet. Resolve before the team sells against both.</li>
+    <li><span class="dr">CONFIRM</span> <strong>Active CBO and recruiting-CBO targets</strong> (72 and 40) are mine, derived from the kit arithmetic, not company-set. Overwrite them if the company has its own.</li>
+  </ul>
+</section>
+
+<footer style="padding:44px 0 20px;color:var(--ink-3);font-size:13px;border-top:2px solid var(--ink);margin-top:40px">
+  <p style="max-width:74ch">Built from VP_SALES_DATA (11 Jun 2026) — KRA, MISSION15, PRICE, FY 26-27 VP, FY 26-27 TEAM, CBO RAW and Gem Raw — plus the diagnostic conversation of 31 August 2026. Every figure traces to those sources; anything that did not is marked <span class="dr">DATA REQUIRED</span>.</p>
+  <p><strong style="color:var(--ink)">Review this document at the end of September</strong> against four weeks of scorecards, and change what did not survive contact with the week.</p>
+</footer>
+</main>
+</div>
