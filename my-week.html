@@ -1,0 +1,351 @@
+<title>The Welocity Week</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EDEFF1; --surface:#FFFFFF; --surface-2:#F5F7F8;
+  --ink:#111A1D; --ink-2:#3D4A4E; --ink-3:#68767B;
+  --line:#D3DADC; --line-2:#E5EAEB;
+  --accent:#00707C; --accent-ink:#00545D; --accent-wash:#DBEAEC;
+  --deep:#00707C; --deep-bg:#CFE5E7;
+  --cbo:#8A5A00; --cbo-bg:#F6EEDC;
+  --team:#1F6F45; --team-bg:#DFEFE6;
+  --quiet:#68767B; --quiet-bg:#EBEEEF;
+  --meet:#33506B; --meet-bg:#DFE7EF;
+  --crit:#A32014;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1416; --surface:#161E21; --surface-2:#1C2529;
+    --ink:#E6ECEE; --ink-2:#AFBCC0; --ink-3:#7D8C91;
+    --line:#2C383C; --line-2:#212C30;
+    --accent:#4FC3CC; --accent-ink:#8AD9DF; --accent-wash:#123539;
+    --deep:#7FD6DD; --deep-bg:#123A3F;
+    --cbo:#E0B061; --cbo-bg:#3A2C0D;
+    --team:#6FCF9A; --team-bg:#153524;
+    --quiet:#8A989D; --quiet-bg:#1F282C;
+    --meet:#9DBBD6; --meet-bg:#1B2A38;
+    --crit:#E8776A;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1416; --surface:#161E21; --surface-2:#1C2529;
+  --ink:#E6ECEE; --ink-2:#AFBCC0; --ink-3:#7D8C91;
+  --line:#2C383C; --line-2:#212C30;
+  --accent:#4FC3CC; --accent-ink:#8AD9DF; --accent-wash:#123539;
+  --deep:#7FD6DD; --deep-bg:#123A3F;
+  --cbo:#E0B061; --cbo-bg:#3A2C0D;
+  --team:#6FCF9A; --team-bg:#153524;
+  --quiet:#8A989D; --quiet-bg:#1F282C;
+  --meet:#9DBBD6; --meet-bg:#1B2A38;
+  --crit:#E8776A;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);margin:0;
+  font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Archivo,"Arial Narrow",system-ui,sans-serif;text-wrap:balance;margin:0}
+.mono,th,.eyebrow,.tlabel,td.num{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px 90px}
+
+header{padding:52px 0 26px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
+h1{font-size:clamp(32px,4.4vw,50px);font-weight:700;letter-spacing:-.025em;line-height:1.03;margin:11px 0 13px;max-width:17ch}
+.dek{font-size:17.5px;color:var(--ink-2);max-width:66ch;margin:0}
+.facts{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);margin-top:28px;background:var(--line)}
+.fact{background:var(--surface);padding:13px 18px;flex:1 1 150px}
+.fact .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.fact .v{font-family:Archivo;font-weight:700;font-size:21px;letter-spacing:-.02em;margin-top:4px}
+
+section{padding:44px 0 4px;border-bottom:1px solid var(--line-2)}
+section:last-of-type{border-bottom:0}
+h2{font-size:25px;font-weight:700;letter-spacing:-.02em;margin-bottom:7px}
+.lede{color:var(--ink-2);max-width:70ch;margin:0 0 20px;font-size:16.5px}
+h3{font-size:16px;font-weight:600;margin:26px 0 8px}
+p{max-width:72ch;margin:0 0 12px}
+ul{max-width:72ch;padding-left:20px;margin:0 0 14px}
+li{margin-bottom:6px}
+
+/* ---- week grid ---- */
+.gridscroll{overflow-x:auto;border:1px solid var(--line);background:var(--surface);margin:8px 0 14px}
+.week{display:grid;grid-template-columns:64px repeat(6,minmax(132px,1fr));
+  grid-template-rows:34px repeat(26,20px);min-width:880px;gap:0}
+.dayhd{position:sticky;top:0;background:var(--surface-2);border-bottom:1px solid var(--line);border-left:1px solid var(--line-2);
+  display:flex;flex-direction:column;justify-content:center;padding:0 8px;z-index:2}
+.dayhd .d{font-family:Archivo;font-weight:700;font-size:13px;letter-spacing:-.01em;line-height:1.1}
+.dayhd .t{font-size:10.5px;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;letter-spacing:.02em;line-height:1.2}
+.corner{background:var(--surface-2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+.tlabel{grid-column:1;font-size:10px;color:var(--ink-3);text-align:right;padding-right:7px;
+  border-top:1px solid var(--line-2);line-height:1;padding-top:2px}
+.blk{border-left:1px solid var(--line-2);border-top:1px solid var(--line-2);padding:3px 7px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-start}
+.blk .n{font-size:11.5px;font-weight:600;line-height:1.2;letter-spacing:-.005em}
+.blk .s{font-size:10px;line-height:1.25;opacity:.82;margin-top:1px}
+.b-deep{background:var(--deep-bg);color:var(--deep)}
+.b-deep .n{color:var(--ink)}
+.b-cbo{background:var(--cbo-bg);color:var(--cbo)}
+.b-cbo .n{color:var(--ink)}
+.b-team{background:var(--team-bg);color:var(--team)}
+.b-team .n{color:var(--ink)}
+.b-meet{background:var(--meet-bg);color:var(--meet)}
+.b-meet .n{color:var(--ink)}
+.b-quiet{background:var(--quiet-bg);color:var(--quiet)}
+.b-quiet .n{color:var(--ink-2)}
+.b-off{background:repeating-linear-gradient(135deg,transparent,transparent 5px,var(--line-2) 5px,var(--line-2) 6px)}
+.legend{display:flex;flex-wrap:wrap;gap:7px 16px;margin:0 0 6px;font-size:12.5px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:2px;flex:none;border:1px solid rgba(0,0,0,.08)}
+
+/* ---- tables ---- */
+.scroller{overflow-x:auto;border:1px solid var(--line);background:var(--surface);margin:12px 0 18px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:600px}
+th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--ink-3);text-align:left;
+  padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line-2);vertical-align:top;line-height:1.42}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13px}
+tbody tr:hover{background:var(--surface-2)}
+.pill{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  font-weight:600;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.p-deep{background:var(--deep-bg);color:var(--deep)}
+.p-cbo{background:var(--cbo-bg);color:var(--cbo)}
+.p-team{background:var(--team-bg);color:var(--team)}
+.p-meet{background:var(--meet-bg);color:var(--meet)}
+.p-quiet{background:var(--quiet-bg);color:var(--quiet)}
+
+.call{border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--surface);padding:15px 18px;margin:18px 0}
+.call .ct{font-family:Archivo;font-weight:600;font-size:14px;margin-bottom:5px}
+.call p:last-child{margin-bottom:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px;margin:14px 0 18px}
+.card{background:var(--surface);border:1px solid var(--line);padding:15px 17px}
+.card h3{margin-top:0;font-size:14px}
+.card p,.card ul{font-size:14.5px}
+.card ul{margin-bottom:0}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:720px){.wrap{padding:0 16px 70px}header{padding-top:30px}}
+</style>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Laxman Pednekar · VP Sales &amp; Business Development</div>
+  <h1>The Welocity Week</h1>
+  <p class="dek">One repeating week, built around the hours you actually work and the days your company already runs. Every key area has a fixed home, so nothing waits for spare time — and four evenings stay yours.</p>
+  <div class="facts">
+    <div class="fact"><div class="k">Mon–Fri</div><div class="v">10:30–5:00</div></div>
+    <div class="fact"><div class="k">Saturday</div><div class="v">10:30–3:00</div></div>
+    <div class="fact"><div class="k">Working week</div><div class="v">37 hours</div></div>
+    <div class="fact"><div class="k">Free evenings</div><div class="v">4 + Sunday</div></div>
+  </div>
+</header>
+
+<section>
+  <h2>The week at a glance</h2>
+  <p class="lede">Print this. Put it where you can see it. The shape repeats every week — only the deep-work topic changes with the day.</p>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--deep-bg)"></i>Deep work — no phone</span>
+    <span><i class="sw" style="background:var(--cbo-bg)"></i>CBO calls — every day</span>
+    <span><i class="sw" style="background:var(--meet-bg)"></i>Meetings &amp; calls</span>
+    <span><i class="sw" style="background:var(--team-bg)"></i>Team</span>
+    <span><i class="sw" style="background:var(--quiet-bg)"></i>Messages, lunch, close</span>
+  </div>
+  <div class="gridscroll"><div class="week">
+    <div class="corner"></div>
+    <div class="dayhd" style="grid-column:2"><span class="d">Monday</span><span class="t">Student Genomics</span></div>
+    <div class="dayhd" style="grid-column:3"><span class="d">Tuesday</span><span class="t">CCNG + Revenue</span></div>
+    <div class="dayhd" style="grid-column:4"><span class="d">Wednesday</span><span class="t">CBO Activation</span></div>
+    <div class="dayhd" style="grid-column:5"><span class="d">Thursday</span><span class="t">Partnerships</span></div>
+    <div class="dayhd" style="grid-column:6"><span class="d">Friday</span><span class="t">Associates</span></div>
+    <div class="dayhd" style="grid-column:7"><span class="d">Saturday</span><span class="t">Review + Team</span></div>
+    <div class="tlabel" style="grid-row:2/4">10:30</div>
+    <div class="tlabel" style="grid-row:4/6">11:00</div>
+    <div class="tlabel" style="grid-row:6/8">11:30</div>
+    <div class="tlabel" style="grid-row:8/10">12:00</div>
+    <div class="tlabel" style="grid-row:10/12">12:30</div>
+    <div class="tlabel" style="grid-row:12/14">1:00</div>
+    <div class="tlabel" style="grid-row:14/16">1:30</div>
+    <div class="tlabel" style="grid-row:16/18">2:00</div>
+    <div class="tlabel" style="grid-row:18/20">2:30</div>
+    <div class="tlabel" style="grid-row:20/22">3:00</div>
+    <div class="tlabel" style="grid-row:22/24">3:30</div>
+    <div class="tlabel" style="grid-row:24/26">4:00</div>
+    <div class="tlabel" style="grid-row:26/28">4:30</div>
+    <div class="blk b-quiet" style="grid-column:2;grid-row:2/3"><span class="n">Start</span></div>
+    <div class="blk b-deep" style="grid-column:2;grid-row:3/9"><span class="n">Deep work</span><span class="s">SGO plan · schools</span></div>
+    <div class="blk b-quiet" style="grid-column:2;grid-row:9/11"><span class="n">Messages</span></div>
+    <div class="blk b-cbo" style="grid-column:2;grid-row:11/14"><span class="n">5 CBO calls</span><span class="s">Walk while calling</span></div>
+    <div class="blk b-quiet" style="grid-column:2;grid-row:14/16"><span class="n">Lunch</span></div>
+    <div class="blk b-meet" style="grid-column:2;grid-row:16/20"><span class="n">Calls</span><span class="s">SG partners</span></div>
+    <div class="blk b-team" style="grid-column:2;grid-row:20/22"><span class="n">Team 30</span><span class="s">Chesha · SGO</span></div>
+    <div class="blk b-quiet" style="grid-column:2;grid-row:22/24"><span class="n">Messages</span><span class="s">+ team questions</span></div>
+    <div class="blk b-deep" style="grid-column:2;grid-row:24/27"><span class="n">Prep</span><span class="s">Tonight's SG webinar</span></div>
+    <div class="blk b-quiet" style="grid-column:2;grid-row:27/28"><span class="n">Close</span></div>
+    <div class="blk b-quiet" style="grid-column:3;grid-row:2/3"><span class="n">Start</span></div>
+    <div class="blk b-deep" style="grid-column:3;grid-row:3/9"><span class="n">Deep work</span><span class="s">Revenue · offers</span></div>
+    <div class="blk b-quiet" style="grid-column:3;grid-row:9/11"><span class="n">Messages</span></div>
+    <div class="blk b-cbo" style="grid-column:3;grid-row:11/14"><span class="n">5 CBO calls</span><span class="s">Walk while calling</span></div>
+    <div class="blk b-quiet" style="grid-column:3;grid-row:14/16"><span class="n">Lunch</span></div>
+    <div class="blk b-meet" style="grid-column:3;grid-row:16/20"><span class="n">Review</span><span class="s">CCNG w/ Mumtaz</span></div>
+    <div class="blk b-team" style="grid-column:3;grid-row:20/22"><span class="n">Team 30</span><span class="s">Shagufta · calls</span></div>
+    <div class="blk b-quiet" style="grid-column:3;grid-row:22/24"><span class="n">Messages</span><span class="s">+ team questions</span></div>
+    <div class="blk b-deep" style="grid-column:3;grid-row:24/27"><span class="n">Pipeline</span><span class="s">Chase stuck deals</span></div>
+    <div class="blk b-quiet" style="grid-column:3;grid-row:27/28"><span class="n">Close</span></div>
+    <div class="blk b-quiet" style="grid-column:4;grid-row:2/3"><span class="n">Start</span></div>
+    <div class="blk b-deep" style="grid-column:4;grid-row:3/9"><span class="n">Deep work</span><span class="s">CBO plan · stock</span></div>
+    <div class="blk b-quiet" style="grid-column:4;grid-row:9/11"><span class="n">Messages</span></div>
+    <div class="blk b-cbo" style="grid-column:4;grid-row:11/14"><span class="n">5 CBO calls</span><span class="s">Walk while calling</span></div>
+    <div class="blk b-quiet" style="grid-column:4;grid-row:14/16"><span class="n">Lunch</span></div>
+    <div class="blk b-meet" style="grid-column:4;grid-row:16/20"><span class="n">CBO 1:1s</span><span class="s">2 per week</span></div>
+    <div class="blk b-team" style="grid-column:4;grid-row:20/22"><span class="n">Team 30</span><span class="s">Archana · planning</span></div>
+    <div class="blk b-quiet" style="grid-column:4;grid-row:22/24"><span class="n">Messages</span><span class="s">+ team questions</span></div>
+    <div class="blk b-deep" style="grid-column:4;grid-row:24/27"><span class="n">Follow-up</span><span class="s">Today's CBOs</span></div>
+    <div class="blk b-quiet" style="grid-column:4;grid-row:27/28"><span class="n">Close</span></div>
+    <div class="blk b-quiet" style="grid-column:5;grid-row:2/3"><span class="n">Start</span></div>
+    <div class="blk b-deep" style="grid-column:5;grid-row:3/9"><span class="n">Deep work</span><span class="s">Proposals</span></div>
+    <div class="blk b-quiet" style="grid-column:5;grid-row:9/11"><span class="n">Messages</span></div>
+    <div class="blk b-cbo" style="grid-column:5;grid-row:11/14"><span class="n">5 CBO calls</span><span class="s">Walk while calling</span></div>
+    <div class="blk b-quiet" style="grid-column:5;grid-row:14/16"><span class="n">Lunch</span></div>
+    <div class="blk b-meet" style="grid-column:5;grid-row:16/20"><span class="n">Out</span><span class="s">School / partner</span></div>
+    <div class="blk b-team" style="grid-column:5;grid-row:20/22"><span class="n">Team 30</span><span class="s">Sakina · decisions</span></div>
+    <div class="blk b-quiet" style="grid-column:5;grid-row:22/24"><span class="n">Messages</span><span class="s">+ team questions</span></div>
+    <div class="blk b-deep" style="grid-column:5;grid-row:24/27"><span class="n">Send</span><span class="s">Proposal / MOU</span></div>
+    <div class="blk b-quiet" style="grid-column:5;grid-row:27/28"><span class="n">Close</span></div>
+    <div class="blk b-quiet" style="grid-column:6;grid-row:2/3"><span class="n">Start</span></div>
+    <div class="blk b-deep" style="grid-column:6;grid-row:3/9"><span class="n">Deep work</span><span class="s">Associate plan</span></div>
+    <div class="blk b-quiet" style="grid-column:6;grid-row:9/11"><span class="n">Messages</span></div>
+    <div class="blk b-cbo" style="grid-column:6;grid-row:11/14"><span class="n">5 CBO calls</span><span class="s">Walk while calling</span></div>
+    <div class="blk b-quiet" style="grid-column:6;grid-row:14/16"><span class="n">Lunch</span></div>
+    <div class="blk b-meet" style="grid-column:6;grid-row:16/20"><span class="n">Calls</span><span class="s">Close & convert</span></div>
+    <div class="blk b-team" style="grid-column:6;grid-row:20/22"><span class="n">Team 30</span><span class="s">Jayshree · numbers</span></div>
+    <div class="blk b-quiet" style="grid-column:6;grid-row:22/24"><span class="n">Messages</span><span class="s">+ team questions</span></div>
+    <div class="blk b-deep" style="grid-column:6;grid-row:24/27"><span class="n">Wrap</span><span class="s">Set up Saturday</span></div>
+    <div class="blk b-quiet" style="grid-column:6;grid-row:27/28"><span class="n">Close</span></div>
+    <div class="blk b-quiet" style="grid-column:7;grid-row:2/3"><span class="n">Start</span></div>
+    <div class="blk b-deep" style="grid-column:7;grid-row:3/6"><span class="n">Week's numbers</span><span class="s">Read, don't collect</span></div>
+    <div class="blk b-meet" style="grid-column:7;grid-row:6/10"><span class="n">Weekly review</span><span class="s">Ends in 3 decisions</span></div>
+    <div class="blk b-quiet" style="grid-column:7;grid-row:10/12"><span class="n">Messages</span></div>
+    <div class="blk b-quiet" style="grid-column:7;grid-row:12/14"><span class="n">Lunch</span></div>
+    <div class="blk b-cbo" style="grid-column:7;grid-row:14/17"><span class="n">CBO calls + prep</span><span class="s">For tonight's meet</span></div>
+    <div class="blk b-team" style="grid-column:7;grid-row:17/19"><span class="n">Team hour</span><span class="s">Recognition · week ahead</span></div>
+    <div class="blk b-quiet" style="grid-column:7;grid-row:19/20"><span class="n">Close week</span></div>
+    <div class="blk b-off" style="grid-column:7;grid-row:20/28"></div>
+  </div></div>
+  <p style="font-size:13px;color:var(--ink-3);max-width:74ch">Monday and Saturday you leave at the normal time and have an evening commitment — SG hosting at 8:00 PM on Monday, the CBO meeting at 8:00 PM on Saturday. Prep for both sits inside the day, in the 4:00 block on Monday and the 1:30 block on Saturday, so you are never preparing at 7:45.</p>
+</section>
+<section>
+  <h2>Your standard day, block by block</h2>
+  <p class="lede">Monday to Friday, 10:30 to 5:00. Each block has one thing that makes it count — if that happened, the block worked.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th class="num">Time</th><th>Block</th><th>Type</th><th style="min-width:250px">What makes it count</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td class="num">10:30–10:45</td><td><strong>Start</strong></td><td><span class="pill p-quiet">Open</span></td><td>Yesterday's numbers seen, and today's <strong>three things</strong> written on paper</td><td>Phone face down</td></tr>
+      <tr><td class="num">10:45–12:15</td><td><strong>Deep work</strong><br><span style="font-size:12px;color:var(--ink-3)">topic changes by day</span></td><td><span class="pill p-deep">Deep</span></td><td>One thing <strong>finished</strong> — a plan, a proposal, a decision. Not "worked on"</td><td>No WhatsApp. Door shut</td></tr>
+      <tr><td class="num">12:15–12:45</td><td>Messages</td><td><span class="pill p-quiet">Open</span></td><td>WhatsApp and email cleared in one pass</td><td>30 min, hard stop</td></tr>
+      <tr><td class="num">12:45–13:30</td><td><strong>5 CBO calls</strong><br><span style="font-size:12px;color:var(--ink-3)">every single day</span></td><td><span class="pill p-cbo">Calls</span></td><td>Five CBOs spoken to. Each call ends with <strong>a number and a date</strong></td><td>Walk while you talk</td></tr>
+      <tr><td class="num">13:30–14:00</td><td>Lunch</td><td><span class="pill p-quiet">Break</span></td><td>Away from the desk. A real break</td><td>No calls</td></tr>
+      <tr><td class="num">14:00–15:00</td><td><strong>Meetings &amp; calls</strong></td><td><span class="pill p-meet">Meet</span></td><td>All meetings live here. Each one ends with a decision and a name</td><td>20 min default, not 60</td></tr>
+      <tr><td class="num">15:00–15:30</td><td><strong>Team 30</strong></td><td><span class="pill p-team">Team</span></td><td>One person leaves more capable. <strong>Not a status update</strong></td><td>Never cancelled</td></tr>
+      <tr><td class="num">15:30–16:00</td><td>Messages + team questions</td><td><span class="pill p-quiet">Open</span></td><td>Team's pending questions and approvals cleared in one batch</td><td>They come to you</td></tr>
+      <tr><td class="num">16:00–16:45</td><td><strong>Second work block</strong></td><td><span class="pill p-deep">Deep</span></td><td>The day's follow-through — or absorb whatever overran</td><td>Protect if free</td></tr>
+      <tr><td class="num">16:45–17:00</td><td><strong>Close</strong></td><td><span class="pill p-quiet">Close</span></td><td>Tomorrow's three written. Desk clear. Day declared finished</td><td><strong>Leave at 5:00</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="call">
+    <div class="ct">Why the day opens with a 15-minute ritual</div>
+    <p>You told me there is no hour when you think best — when you are focused, your thinking is sharp whatever the time or place. So this schedule does not try to catch a peak. It protects against the real enemy, which is <strong>starting badly and being interrupted.</strong></p>
+    <p>The 10:30 block is the on-ramp: numbers, three things, phone down. It is short on purpose. Its only job is to make the 10:45 block actually begin — because on the days it does begin, the rest of your day follows.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Saturday</h2>
+  <p class="lede">10:30 to 3:00. A different shape: this is the day you look at the whole business rather than push it.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th class="num">Time</th><th>Block</th><th style="min-width:250px">What makes it count</th></tr></thead>
+    <tbody>
+      <tr><td class="num">10:30–10:45</td><td>Start</td><td>Week's numbers open in front of you</td></tr>
+      <tr><td class="num">10:45–11:30</td><td><strong>The week's numbers</strong></td><td>Revenue, samples, CBO count, SGO. <strong>You read them — you don't build them</strong></td></tr>
+      <tr><td class="num">11:30–12:30</td><td><strong>Weekly review</strong></td><td>Ends with <strong>three decisions written down</strong>, each with an owner and a date. Not a summary</td></tr>
+      <tr><td class="num">12:30–13:00</td><td>Messages</td><td>Week's loose ends closed</td></tr>
+      <tr><td class="num">13:00–13:30</td><td>Lunch</td><td>—</td></tr>
+      <tr><td class="num">13:30–14:15</td><td><strong>CBO calls + tonight's prep</strong></td><td>Calls done, and the 8:00 PM CBO meeting fully prepared</td></tr>
+      <tr><td class="num">14:15–14:45</td><td><strong>Team hour</strong></td><td>Name the week's best work publicly. Set next week with the team</td></tr>
+      <tr><td class="num">14:45–15:00</td><td>Close the week</td><td>Next week's three biggest outcomes written before you leave</td></tr>
+      <tr><td class="num">20:00–21:30</td><td><strong>CBO meeting</strong></td><td>20 min recognition · 20 min training · 20 min commitments with numbers</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Evenings and Sunday</h2>
+  <p class="lede">This is the part that answers "time for everything." You have more of it than it currently feels like — it just has no shape.</p>
+  <div class="grid2">
+    <div class="card">
+      <h3>Monday · SG hosting</h3>
+      <p>Leave office 5:00. Prep is already done in the 4:00 block. Webinar 8:00–9:30.</p>
+    </div>
+    <div class="card">
+      <h3>Tue · Wed · Thu · Fri</h3>
+      <p><strong>Free.</strong> Four evenings a week with nothing scheduled. This is where family, health and rest live — not in whatever is left over.</p>
+    </div>
+    <div class="card">
+      <h3>Saturday · CBO meeting</h3>
+      <p>Leave office 3:00. Afternoon free. Meeting 8:00–9:30.</p>
+    </div>
+    <div class="card">
+      <h3>Sunday</h3>
+      <p><strong>Off.</strong> The company runs Digital Entrepreneurship; you do not need to be in it. You return on Monday able to think — that is the day's output.</p>
+    </div>
+  </div>
+
+  <div class="call">
+    <div class="ct">Two small things that make the evenings actually work</div>
+    <p><strong>The 4:45 close is not optional.</strong> You said you get home still overloaded and lose the evening scrolling. A day that never formally ends stays open in your head, and an open day cannot be rested from — so the mind reaches for the easiest off-switch. The fifteen minutes at 4:45 is what closes it.</p>
+    <p><strong>Walk your CBO calls.</strong> The 12:45 block is 45 minutes of talking on the phone, six days a week. It does not need a chair. That is four and a half hours of walking a week at no extra cost in time — the only version of exercise that survives a 37-hour week with 8 PM commitments.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Every key area has a home</h2>
+  <p class="lede">Nothing here depends on finding time. Check this list whenever the week starts to slip — if an area has gone quiet, its block was given away to something else.</p>
+  <div class="scroller">
+  <table>
+    <thead><tr><th>Key area</th><th>Lives at</th><th class="num">Per week</th><th>Cadence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CBO activation</strong><br><span style="font-size:12px;color:var(--ink-3)">Your biggest revenue line</span></td><td>12:45 daily + all of Wednesday + Saturday 8 PM meeting</td><td class="num">~7 h</td><td>Daily</td></tr>
+      <tr><td><strong>Student Genomics</strong><br><span style="font-size:12px;color:var(--ink-3)">Your biggest gap</span></td><td>Monday deep + Monday calls + Monday 8 PM webinar</td><td class="num">~5 h</td><td>Weekly, plus Thursday's school meetings</td></tr>
+      <tr><td><strong>Revenue &amp; conversion</strong></td><td>Tuesday deep + Tuesday review + Friday calls</td><td class="num">~4 h</td><td>Weekly deep, daily glance</td></tr>
+      <tr><td><strong>Associates</strong></td><td>Friday — convocation day, fresh graduates</td><td class="num">~3 h</td><td>Weekly</td></tr>
+      <tr><td><strong>Partnerships &amp; new business</strong></td><td>Thursday — out of office for school and partner meetings</td><td class="num">~4 h</td><td>Weekly</td></tr>
+      <tr><td><strong>Team</strong></td><td>15:00 daily + Saturday team hour</td><td class="num">~3 h</td><td>Daily</td></tr>
+      <tr><td><strong>CCNG / UPG / CCN</strong></td><td>Tuesday review only — you check it, you don't run it</td><td class="num">~1 h</td><td>Weekly</td></tr>
+      <tr><td>Messages &amp; admin</td><td>Three windows a day, nowhere else</td><td class="num">~4.5 h</td><td>Daily</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Six rules that make it stick</h2>
+  <p class="lede">The grid is easy. These are the part that decides whether it survives week two.</p>
+  <div class="grid2">
+    <div class="card"><h3>1 · The 10:45 block is sacred</h3><p>Phone face down, door shut, ninety minutes. If you protect one thing on this page, protect this. Everything else can flex.</p></div>
+    <div class="card"><h3>2 · Messages have three windows</h3><p>12:15, 3:30, and a short sweep before evening. Outside those, only a <strong>phone call</strong> reaches you — tell the team that, once, clearly.</p></div>
+    <div class="card"><h3>3 · Five CBOs, every day, no exceptions</h3><p>Six days a week is 120 conversations a month. Each ends with a number and a date, or it did not happen.</p></div>
+    <div class="card"><h3>4 · Meetings only at 2:00</h3><p>When someone asks for time, the answer is "2 o'clock". Twenty minutes unless there is a real reason. This keeps mornings whole.</p></div>
+    <div class="card"><h3>5 · The 3:00 team block is never cancelled</h3><p>It is the first thing that will feel skippable and the last thing you should skip — it is what eventually gives you back hours.</p></div>
+    <div class="card"><h3>6 · Leave at 5:00, having closed the day</h3><p>Fifteen minutes to score the day and write tomorrow's three. Then stop. The evening is not overflow space.</p></div>
+  </div>
+
+  <div class="call">
+    <div class="ct">Run it for two weeks before you change it</div>
+    <p>Some blocks will not survive contact with a real week, and that is fine — but change them <em>after</em> two weeks, not on day three when the first thing goes wrong. Keep a note of which block kept getting taken; that note tells you more about where your time actually goes than any plan can.</p>
+    <p>The one test at the end of a week: <strong>did the CBO number move, did Student Genomics move, and did you leave at 5:00 most days?</strong> If yes, the week worked, whatever else happened.</p>
+  </div>
+</section>
+</div>
